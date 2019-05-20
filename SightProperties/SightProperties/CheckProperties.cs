@@ -50,7 +50,12 @@ namespace SightProperties
                         && propertiesBundle.CompareTo("fwlauncher") != 0
                         && propertiesBundle.CompareTo("ogreConfig") != 0
                         && propertiesBundle.CompareTo("configOgreEx") != 0
-                        && propertiesBundle.CompareTo("ioVtkGdcm") != 0) 
+                        && propertiesBundle.CompareTo("ioVtkGdcm") != 0
+                        && propertiesBundle.CompareTo("2DVisualizationActivity") != 0
+                        && propertiesBundle.CompareTo("3DVisualizationActivity") != 0
+                        && propertiesBundle.CompareTo("modelSeriesConfig") != 0
+                        && propertiesBundle.CompareTo("imageConfig") != 0
+                        && propertiesBundle.CompareTo("registrationActivity") != 0) 
                     {
                         isValid = false;
                         Console.WriteLine("The bundle: `" + propertiesBundle + "` is not used");
