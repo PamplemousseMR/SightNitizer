@@ -47,7 +47,10 @@ namespace SightProperties
                 {
                     /// Check special bundles
                     if (propertiesBundle.CompareTo("appXml") != 0
-                        && propertiesBundle.CompareTo("fwlauncher") != 0)
+                        && propertiesBundle.CompareTo("fwlauncher") != 0
+                        && propertiesBundle.CompareTo("ogreConfig") != 0
+                        && propertiesBundle.CompareTo("configOgreEx") != 0
+                        && propertiesBundle.CompareTo("ioVtkGdcm") != 0) 
                     {
                         isValid = false;
                         Console.WriteLine("The bundle: `" + propertiesBundle + "` is not used");

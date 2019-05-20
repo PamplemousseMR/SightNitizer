@@ -37,7 +37,7 @@ namespace SightProperties
                     requirement.CompareTo("filterUnknownSeries") == 0 ||
                     requirement.CompareTo("filterVRRender") == 0 ||
                     requirement.CompareTo("activities") == 0 ||
-                    requirement.CompareTo("appXml") == 0 ||
+                    //requirement.CompareTo("appXml") == 0 ||
                     requirement.CompareTo("arDataReg") == 0 ||
                     requirement.CompareTo("dataReg") == 0 ||
                     requirement.CompareTo("memory") == 0 ||
