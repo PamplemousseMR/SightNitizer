@@ -21,15 +21,59 @@ namespace SightProperties
             bundles.AddRange(Bundle.getVTKBundles(Option.getDirectory()));
             bundles.AddRange(Bundle.getStandardBundles(Option.getDirectory()));
             bundles.AddRange(Bundle.getMediaBundles(Option.getDirectory()));
-            bundles.AddRange(Bundle.getIncludeBundles(Option.getDirectory()));
+            //bundles.AddRange(Bundle.getIncludeBundles(Option.getDirectory()));
 
             /// Get Properties.cmake
-            String properties = Option.getDirectory() + "\\Properties.cmake";
+            String propertiesFile = Option.getDirectory() + "\\Properties.cmake";
             /// Check properties.cmake
-            CheckProperties.checkProperties(properties, bundles);
+            List<String> propertiesBundles = Properties.getRequirements(propertiesFile);
+            List<String> parsedProperties = new List<string>();
+
+            foreach (Tuple<String, String> bundle in bundles)
+            {
+                /// Check this special bundle
+                if (bundle.Item1.CompareTo("fwServices") != 0)
+                {
+                    bool find = false;
+                    foreach (String propertiesBundle in propertiesBundles)
+                    {
+                        if (propertiesBundle.CompareTo(bundle.Item1) == 0)
+                        {
+                            find = true;
+                            parsedProperties.Add(propertiesBundle);
+                            break;
+                        }
+                    }
+                    if (!find)
+                    {
+                        Console.WriteLine("The bundle: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the file: `" + propertiesFile + "`");
+                    }
+                }
+            }
+
+            foreach (String propertiesBundle in propertiesBundles)
+            {
+                if (!parsedProperties.Remove(propertiesBundle))
+                {
+                    /// Check special bundles
+                    if (propertiesBundle.CompareTo("appXml") != 0
+                        && propertiesBundle.CompareTo("fwlauncher") != 0
+                        && propertiesBundle.CompareTo("ogreConfig") != 0
+                        && propertiesBundle.CompareTo("configOgreEx") != 0
+                        && propertiesBundle.CompareTo("ioVtkGdcm") != 0
+                        && propertiesBundle.CompareTo("2DVisualizationActivity") != 0
+                        && propertiesBundle.CompareTo("3DVisualizationActivity") != 0
+                        && propertiesBundle.CompareTo("modelSeriesConfig") != 0
+                        && propertiesBundle.CompareTo("imageConfig") != 0
+                        && propertiesBundle.CompareTo("registrationActivity") != 0)
+                    {
+                        Console.WriteLine("The bundle: `" + propertiesBundle + "` is not used");
+                    }
+                }
+            }
 
             /// Check bundles that need to be started
-            List<String> requirements = CheckProperties.getBundles(properties);
+            List<String> requirements = Properties.getRequirements(propertiesFile);
             List<Tuple<String, String>> startedRequirements = Bundle.getRequireBundles(Option.getDirectory());
             foreach(String requirement in requirements)
             {

@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bundle.cs" />
-    <Compile Include="CheckProperties.cs" />
+    <Compile Include="Properties.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
