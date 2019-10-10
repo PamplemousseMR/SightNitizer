@@ -91,5 +91,31 @@ namespace SightProperties
             }
             return cleanLines;
         }
+
+        /// <summary>
+        /// Get the type of a properties file
+        /// </summary>
+        /// <param name="_file">The properties file</param>
+        /// <returns>The type of the directory</returns>
+        public static String getType(String _file)
+        {
+            String[] lines = System.IO.File.ReadAllLines(_file);
+            String type = "Unknow";
+
+            foreach (String line in lines)
+            {
+                int comment = line.IndexOf("#");
+                comment = comment < 0 ? line.Length : comment;
+                String noComment = line.Substring(0, comment);
+
+                if (noComment.Contains("TYPE"))
+                {
+                    String cleanLine = Regex.Replace(noComment, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+                    type = cleanLine.Replace("setTYPE", "");
+                }
+
+            }
+            return type;
+        }
     }
 }

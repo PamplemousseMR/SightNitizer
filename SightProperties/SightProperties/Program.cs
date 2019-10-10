@@ -35,11 +35,46 @@ namespace SightProperties
             /// Get Properties.cmake
             String propertiesFile = Option.getDirectory() + "\\Properties.cmake";
 
+            /// Get the type of the directory (APP/EXECUTABLE/BUNDLE/LIBRARY/TEST)
+            String propertiesType = Properties.getType(propertiesFile);
+
             /// Get the requirement list
             List<String> propertiesRequirements = Properties.getRequirements(propertiesFile);
 
             /// Get the dependencies list
             List<String> propertiesDependencies = Properties.getDependencies(propertiesFile);
+
+            ///========================================================================================================
+            /// Check that appxml and fwlauncher are in the Properties.cmake in case of APP
+            ///========================================================================================================
+            if (propertiesType.CompareTo("APP") == 0)
+            {
+                bool findAppXml = false;
+                bool findFwlauncher = false;
+                foreach (String propertiesRequirement in propertiesRequirements)
+                {
+                    if (findAppXml && findFwlauncher)
+                    {
+                        break;
+                    }
+                    if (propertiesRequirement.CompareTo("appXml") == 0)
+                    {
+                        findAppXml = true;
+                    }
+                    else if (propertiesRequirement.CompareTo("fwlauncher") == 0)
+                    {
+                        findFwlauncher = true;
+                    }
+                }
+                if(!findAppXml)
+                {
+                    Console.WriteLine("The bundle: `appXml` was not found in the file: `" + propertiesFile + "`");
+                }
+                if (!findFwlauncher)
+                {
+                    Console.WriteLine("The bundle: `fwlauncher` was not found in the file: `" + propertiesFile + "`");
+                }
+            }
 
             ///========================================================================================================
             /// Check that bundles used in xml files are in the Properties.cmake (REQUIREMENT)
