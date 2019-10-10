@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bundle.cs" />
+    <Compile Include="Files.cs" />
     <Compile Include="Properties.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="Program.cs" />

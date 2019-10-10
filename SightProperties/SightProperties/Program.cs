@@ -13,34 +13,48 @@ namespace SightProperties
                 Environment.Exit(1);
             }
 
-            /// Get bundles list
-            List<Tuple<String, String>> bundles = Bundle.getDefaultBundles(Option.getDirectory());
-            bundles.AddRange(Bundle.getRequireBundles(Option.getDirectory()));
-            bundles.AddRange(Bundle.getObjectsBundles(Option.getDirectory()));
-            bundles.AddRange(Bundle.getOgreBundles(Option.getDirectory()));
-            bundles.AddRange(Bundle.getVTKBundles(Option.getDirectory()));
-            bundles.AddRange(Bundle.getStandardBundles(Option.getDirectory()));
-            bundles.AddRange(Bundle.getMediaBundles(Option.getDirectory()));
-            //bundles.AddRange(Bundle.getIncludeBundles(Option.getDirectory()));
+            /// Get current libray/bundle name
+            String[] path = Option.getDirectory().Split('\\');
+            String currentName = path[path.Length - 1];
+
+            /// Get bundles list of xml files
+            List<Tuple<String, String>> xmlBundles = Files.getDefaultBundles(Option.getDirectory());
+            xmlBundles.AddRange(Files.getRequireBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Files.getObjectsBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Files.getOgreBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Files.getVTKBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Files.getStandardBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Files.getMediaBundles(Option.getDirectory()));
+
+            /// Get require bundles in xml files
+            List<Tuple<String, String>> xmlRequirements = Files.getRequireBundles(Option.getDirectory());
+
+            /// Get bundles list of languages files
+            List<Tuple<String, String>> languagesBundles = Files.getIncludeBundles(Option.getDirectory());
 
             /// Get Properties.cmake
             String propertiesFile = Option.getDirectory() + "\\Properties.cmake";
-            /// Check properties.cmake
-            List<String> propertiesBundles = Properties.getRequirements(propertiesFile);
-            List<String> parsedProperties = new List<string>();
 
-            foreach (Tuple<String, String> bundle in bundles)
+            /// Get the requirement list
+            List<String> propertiesRequirements = Properties.getRequirements(propertiesFile);
+
+            /// Get the dependencies list
+            List<String> propertiesDependencies = Properties.getDependencies(propertiesFile);
+
+            ///========================================================================================================
+            /// Check that bundles used in xml files are in the Properties.cmake (REQUIREMENT)
+            ///========================================================================================================
+            foreach (Tuple<String, String> bundle in xmlBundles)
             {
                 /// Check this special bundle
                 if (bundle.Item1.CompareTo("fwServices") != 0)
                 {
                     bool find = false;
-                    foreach (String propertiesBundle in propertiesBundles)
+                    foreach (String requirement in propertiesRequirements)
                     {
-                        if (propertiesBundle.CompareTo(bundle.Item1) == 0)
+                        if (requirement.CompareTo(bundle.Item1) == 0)
                         {
                             find = true;
-                            parsedProperties.Add(propertiesBundle);
                             break;
                         }
                     }
@@ -51,58 +65,36 @@ namespace SightProperties
                 }
             }
 
-            foreach (String propertiesBundle in propertiesBundles)
+            ///========================================================================================================
+            /// Check that bundle in xml file are properly started (requirement in xml files)
+            ///========================================================================================================
+            foreach (String propertiesRequirement in propertiesRequirements)
             {
-                if (!parsedProperties.Remove(propertiesBundle))
-                {
-                    /// Check special bundles
-                    if (propertiesBundle.CompareTo("appXml") != 0
-                        && propertiesBundle.CompareTo("fwlauncher") != 0
-                        && propertiesBundle.CompareTo("ogreConfig") != 0
-                        && propertiesBundle.CompareTo("configOgreEx") != 0
-                        && propertiesBundle.CompareTo("ioVtkGdcm") != 0
-                        && propertiesBundle.CompareTo("2DVisualizationActivity") != 0
-                        && propertiesBundle.CompareTo("3DVisualizationActivity") != 0
-                        && propertiesBundle.CompareTo("modelSeriesConfig") != 0
-                        && propertiesBundle.CompareTo("imageConfig") != 0
-                        && propertiesBundle.CompareTo("registrationActivity") != 0)
-                    {
-                        Console.WriteLine("The bundle: `" + propertiesBundle + "` is not used");
-                    }
-                }
-            }
-
-            /// Check bundles that need to be started
-            List<String> requirements = Properties.getRequirements(propertiesFile);
-            List<Tuple<String, String>> startedRequirements = Bundle.getRequireBundles(Option.getDirectory());
-            foreach(String requirement in requirements)
-            {
-                if (requirement.CompareTo("validators") == 0 ||
-                    requirement.CompareTo("filterUnknownSeries") == 0 ||
-                    requirement.CompareTo("filterVRRender") == 0 ||
-                    requirement.CompareTo("activities") == 0 ||
-                    //requirement.CompareTo("appXml") == 0 ||
-                    requirement.CompareTo("arDataReg") == 0 ||
-                    requirement.CompareTo("dataReg") == 0 ||
-                    requirement.CompareTo("memory") == 0 ||
-                    requirement.CompareTo("preferences") == 0 ||
-                    requirement.CompareTo("servicesReg") == 0 ||
-                    requirement.CompareTo("ioDicomWeb") == 0 ||
-                    requirement.CompareTo("ioPacs") == 0 ||
-                    requirement.CompareTo("arPatchMedicalData") == 0 ||
-                    requirement.CompareTo("patchMedicalData") == 0 ||
-                    requirement.CompareTo("console") == 0 ||
-                    requirement.CompareTo("guiQt") == 0 ||
-                    requirement.CompareTo("scene2D") == 0 ||
-                    requirement.CompareTo("visuOgre") == 0 ||
-                    requirement.CompareTo("material") == 0 ||
-                    requirement.CompareTo("visuVTKQml") == 0 ||
-                    requirement.CompareTo("visuVTKQt") == 0)
+                if (propertiesRequirement.CompareTo("validators") == 0 ||
+                    propertiesRequirement.CompareTo("filterUnknownSeries") == 0 ||
+                    propertiesRequirement.CompareTo("filterVRRender") == 0 ||
+                    propertiesRequirement.CompareTo("activities") == 0 ||
+                    propertiesRequirement.CompareTo("arDataReg") == 0 ||
+                    propertiesRequirement.CompareTo("dataReg") == 0 ||
+                    propertiesRequirement.CompareTo("memory") == 0 ||
+                    propertiesRequirement.CompareTo("preferences") == 0 ||
+                    propertiesRequirement.CompareTo("servicesReg") == 0 ||
+                    propertiesRequirement.CompareTo("ioDicomWeb") == 0 ||
+                    propertiesRequirement.CompareTo("ioPacs") == 0 ||
+                    propertiesRequirement.CompareTo("arPatchMedicalData") == 0 ||
+                    propertiesRequirement.CompareTo("patchMedicalData") == 0 ||
+                    propertiesRequirement.CompareTo("console") == 0 ||
+                    propertiesRequirement.CompareTo("guiQt") == 0 ||
+                    propertiesRequirement.CompareTo("scene2D") == 0 ||
+                    propertiesRequirement.CompareTo("visuOgre") == 0 ||
+                    propertiesRequirement.CompareTo("material") == 0 ||
+                    propertiesRequirement.CompareTo("visuVTKQml") == 0 ||
+                    propertiesRequirement.CompareTo("visuVTKQt") == 0)
                 {
                     bool find = false;
-                    foreach (Tuple<String, String> startedRequirement in startedRequirements)
+                    foreach (Tuple<String, String> requirement in xmlRequirements)
                     {
-                        if (requirement.CompareTo(startedRequirement.Item1) == 0)
+                        if (propertiesRequirement.CompareTo(requirement.Item1) == 0)
                         {
                             find = true;
                             break;
@@ -111,8 +103,62 @@ namespace SightProperties
 
                     if (!find)
                     {
-                        Console.WriteLine("The bundle: `" + requirement + "` need to be in the xml's requirements list");
+                        Console.WriteLine("The bundle: `" + propertiesRequirement + "` need to be in the xml's requirements list");
                     }
+                }
+            }
+
+            ///========================================================================================================
+            /// Check that library used in languages files are in the Properties.cmake (DEPENDENCIES)
+            ///========================================================================================================
+            foreach (Tuple<String, String> bundle in languagesBundles)
+            {
+                if (bundle.Item1.CompareTo(currentName) != 0 &&
+                    bundle.Item1.CompareTo("boost") != 0 &&
+                    bundle.Item1.CompareTo("OGRE") != 0 &&
+                    bundle.Item1.CompareTo("GL") != 0 &&
+                    bundle.Item1.CompareTo("OpenGL") != 0 &&
+                    bundle.Item1.CompareTo("glm") != 0 &&
+                    bundle.Item1.CompareTo("cppunit") != 0)
+                {
+                    bool find = false;
+                    foreach (String dependenci in propertiesDependencies)
+                    {
+                        if (dependenci.CompareTo(bundle.Item1) == 0)
+                        {
+                            find = true;
+                            break;
+                        }
+                    }
+                    if (!find)
+                    {
+                        Console.WriteLine("The library: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the file: `" + propertiesFile + "`");
+                    }
+                }
+            }
+
+            ///========================================================================================================
+            /// Check that bundles and libraries in the Properties.cmake are used
+            ///========================================================================================================
+            List<Tuple<String, String>> bundlesAndLibraries = xmlBundles;
+            bundlesAndLibraries.AddRange(languagesBundles);
+
+            List<String> requirementsAnDependencies = propertiesRequirements;
+            requirementsAnDependencies.AddRange(propertiesDependencies);
+            foreach(String requirementOrDependency in requirementsAnDependencies)
+            {
+                bool find = false;
+                foreach(Tuple<String, String> bundleOrLibrary in bundlesAndLibraries)
+                {
+                    if(requirementOrDependency.CompareTo(bundleOrLibrary.Item1) == 0)
+                    {
+                        find = true;
+                        break;
+                    }
+                }
+                if (!find)
+                {
+                    Console.WriteLine("The library/bundle: `" + requirementOrDependency + "` is not used");
                 }
             }
         }

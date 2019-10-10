@@ -6,7 +6,7 @@ using System.Xml;
 
 namespace SightProperties
 {
-    class Bundle
+    class Files
     {
         /// <summary>
         /// Get default bundle like serviceReg
@@ -58,23 +58,23 @@ namespace SightProperties
         /// Get bundles related to cpp/hpp/c/h files
         /// </summary>
         /// <returns>The list of require bundles</returns>
-        //public static List<Tuple<String, String>> getIncludeBundles(String _rep)
-        //{
-        //    List<String> languageFiles = getLanguageFiles(_rep);
+        public static List<Tuple<String, String>> getIncludeBundles(String _rep)
+        {
+            List<String> languageFiles = getLanguageFiles(_rep);
 
-        //    List<Tuple<String, String>> bundles = new List<Tuple<String, String>>();
-        //    foreach (String file in languageFiles)
-        //    {
-        //        List<String> requirements = getIncludes(file);
+            List<Tuple<String, String>> bundles = new List<Tuple<String, String>>();
+            foreach (String file in languageFiles)
+            {
+                List<String> requirements = getIncludes(file);
 
-        //        foreach (String s in requirements)
-        //        {
-        //            bundles.Add(new Tuple<String, String>(s, file));
-        //        }
-        //    }
+                foreach (String s in requirements)
+                {
+                    bundles.Add(new Tuple<String, String>(s, file));
+                }
+            }
 
-        //    return bundles;
-        //}
+            return bundles;
+        }
 
         /// <summary>
         /// Get bundles related to object like dataReg or arDataReg
@@ -327,24 +327,20 @@ namespace SightProperties
         /// </summary>
         /// <param name="_file">The language file</param>
         /// <returns>The list of all bundles</returns>
-        //static List<String> getIncludes(String _file)
-        //{
-        //    List<String> bundles = new List<String>();
+        static List<String> getIncludes(String _file)
+        {
+            List<String> bundles = new List<String>();
 
-        //    String text = File.ReadAllText(_file);
-        //    Regex regex = new Regex(@"#include +<[^/\.>]*/", RegexOptions.Compiled);
-        //    Regex regexBundle = new Regex(@"<.*", RegexOptions.Compiled);
-        //    foreach (Match include in regex.Matches(text))
-        //    {
-        //        String bundle = regexBundle.Match(include.ToString()).ToString().Replace("<", string.Empty).Replace("/", string.Empty);
-        //        if (bundle.CompareTo("boost") != 0 &&
-        //            bundle.CompareTo("OGRE") != 0)
-        //        { 
-        //            bundles.Add(bundle);
-        //        }
-        //    }
+            String text = File.ReadAllText(_file);
+            Regex regex = new Regex(@"#include +<[^/\.>]*/", RegexOptions.Compiled);
+            Regex regexBundle = new Regex(@"<.*", RegexOptions.Compiled);
+            foreach (Match include in regex.Matches(text))
+            {
+                String bundle = regexBundle.Match(include.ToString()).ToString().Replace("<", string.Empty).Replace("/", string.Empty);
+                bundles.Add(bundle);
+            }
 
-        //    return bundles;
-        //}
+            return bundles;
+        }
     }
 }
