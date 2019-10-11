@@ -87,6 +87,14 @@ namespace SightProperties
                     {
                         bundles.Add(new Tuple<String, String>("arDataReg", file));
                     }
+                    else if (s.StartsWith("::rdDataBiopsy::"))
+                    {
+                        bundles.Add(new Tuple<String, String>("rdDataBiopsyReg", file));
+                    }
+                    else if (s.StartsWith("::brData::"))
+                    {
+                        bundles.Add(new Tuple<String, String>("brDataReg", file));
+                    }
                 }
             }
 
