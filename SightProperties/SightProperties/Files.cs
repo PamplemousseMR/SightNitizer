@@ -24,6 +24,10 @@ namespace SightProperties
                 {
                     bundles.Add(new Tuple<String, String>("servicesReg", file));
                 }
+                if (text.Contains("::fwActivities::"))
+                {
+                    bundles.Add(new Tuple<String, String>("activities", file));
+                }
             }
 
             return bundles;
