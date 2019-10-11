@@ -83,7 +83,8 @@ namespace SightProperties
             foreach (Tuple<String, String> bundle in xmlBundles)
             {
                 /// Check this special bundle, it's not in the requirement list, tere are include by others bundles
-                if (bundle.Item1.CompareTo("fwServices") != 0 &&
+                if (bundle.Item1.CompareTo(currentName) != 0 &&
+                    bundle.Item1.CompareTo("fwServices") != 0 &&
                     bundle.Item1.CompareTo("fwRenderOgre") != 0 &&
                     bundle.Item1.CompareTo("fwActivities") != 0)
                 {
