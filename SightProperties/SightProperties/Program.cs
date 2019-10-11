@@ -45,7 +45,7 @@ namespace SightProperties
             List<String> propertiesDependencies = Properties.getDependencies(propertiesFile);
 
             ///========================================================================================================
-            /// Check that appxml and fwlauncher are in the Properties.cmake in case of APP
+            /// Check that appxml and fwlauncher are in the Properties.cmake in case of APP type bundles
             ///========================================================================================================
             if (propertiesType.CompareTo("APP") == 0)
             {
@@ -81,8 +81,9 @@ namespace SightProperties
             ///========================================================================================================
             foreach (Tuple<String, String> bundle in xmlBundles)
             {
-                /// Check this special bundle
-                if (bundle.Item1.CompareTo("fwServices") != 0)
+                /// Check this special bundle, it's not in the requirement list, tere are include by others bundles
+                if (bundle.Item1.CompareTo("fwServices") != 0 &&
+                    bundle.Item1.CompareTo("fwRenderOgre") != 0)
                 {
                     bool find = false;
                     foreach (String requirement in propertiesRequirements)
@@ -148,13 +149,16 @@ namespace SightProperties
             ///========================================================================================================
             foreach (Tuple<String, String> bundle in languagesBundles)
             {
+                /// Skip external libraries
                 if (bundle.Item1.CompareTo(currentName) != 0 &&
                     bundle.Item1.CompareTo("boost") != 0 &&
                     bundle.Item1.CompareTo("OGRE") != 0 &&
                     bundle.Item1.CompareTo("GL") != 0 &&
                     bundle.Item1.CompareTo("OpenGL") != 0 &&
                     bundle.Item1.CompareTo("glm") != 0 &&
-                    bundle.Item1.CompareTo("cppunit") != 0)
+                    bundle.Item1.CompareTo("cppunit") != 0 &&
+                    bundle.Item1.CompareTo("opencv2") != 0 &&
+                    bundle.Item1.CompareTo("ceres") != 0)
                 {
                     bool find = false;
                     foreach (String dependenci in propertiesDependencies)
@@ -191,9 +195,14 @@ namespace SightProperties
                         break;
                     }
                 }
-                if (!find)
+                /// If the bundle is appXml or fwlauncher, it can't be used.
+                /// These bundle must be here only in APP type bundles.
+                if (!((requirementOrDependency.CompareTo("appXml") == 0 || requirementOrDependency.CompareTo("fwlauncher") == 0) && propertiesType.CompareTo("APP") == 0))
                 {
-                    Console.WriteLine("The library/bundle: `" + requirementOrDependency + "` is not used");
+                    if (!find)
+                    {
+                        Console.WriteLine("The library/bundle: `" + requirementOrDependency + "` is not used");
+                    }
                 }
             }
         }
