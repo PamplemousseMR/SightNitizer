@@ -86,7 +86,8 @@ namespace SightProperties
                 if (bundle.Item1.CompareTo(currentName) != 0 &&
                     bundle.Item1.CompareTo("fwServices") != 0 &&
                     bundle.Item1.CompareTo("fwRenderOgre") != 0 &&
-                    bundle.Item1.CompareTo("fwActivities") != 0)
+                    bundle.Item1.CompareTo("fwActivities") != 0 &&
+                    bundle.Item1.CompareTo("fwRenderQt") != 0)
                 {
                     bool find = false;
                     foreach (String requirement in propertiesRequirements)

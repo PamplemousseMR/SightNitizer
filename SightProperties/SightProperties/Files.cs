@@ -28,6 +28,10 @@ namespace SightProperties
                 {
                     bundles.Add(new Tuple<String, String>("activities", file));
                 }
+                if (text.Contains("::fwRenderQt::"))
+                {
+                    bundles.Add(new Tuple<String, String>("scene2D", file));
+                }
             }
 
             return bundles;
