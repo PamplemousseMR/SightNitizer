@@ -55,28 +55,6 @@ namespace SightProperties
         }
 
         /// <summary>
-        /// Get bundles related to cpp/hpp/c/h files
-        /// </summary>
-        /// <returns>The list of require bundles</returns>
-        public static List<Tuple<String, String>> getIncludeBundles(String _rep)
-        {
-            List<String> languageFiles = getLanguageFiles(_rep);
-
-            List<Tuple<String, String>> bundles = new List<Tuple<String, String>>();
-            foreach (String file in languageFiles)
-            {
-                List<String> requirements = getIncludes(file);
-
-                foreach (String s in requirements)
-                {
-                    bundles.Add(new Tuple<String, String>(s, file));
-                }
-            }
-
-            return bundles;
-        }
-
-        /// <summary>
         /// Get bundles related to object like dataReg or arDataReg
         /// </summary>
         /// <returns>The list of require bundles</returns>
@@ -215,16 +193,87 @@ namespace SightProperties
             return bundles;
         }
 
+        /// <summary>
+        /// Get bundles related to appconfig
+        /// </summary>
+        /// <returns>The list of require bundles</returns>
+        public static List<Tuple<String, String>> getAppConfigBundles(String _rep)
+        {
+            List<String> xmlFiles = getXMLFiles(_rep);
+            List<Tuple<String, String>> bundles = new List<Tuple<String, String>>();
+            foreach (String file in xmlFiles)
+            {
+                String text = File.ReadAllText(file);
+                if (text.Contains("id=\"ActivityLauncher\""))
+                {
+                    bundles.Add(new Tuple<String, String>("activitiesConfig", file));
+                }
+                if (text.Contains("id=\"OgreHistogramManager\"") ||
+                    text.Contains("id=\"OgreLightManager\"") ||
+                    text.Contains("id=\"OgreOrganManager\""))
+                {
+                    bundles.Add(new Tuple<String, String>("ogreConfig", file));
+                }
+                if (text.Contains("id=\"ImageManager\"") ||
+                    text.Contains("id=\"ModelSeriesManagerView\"") ||
+                    text.Contains("id=\"ModelSeriesManagerWindow\""))
+                {
+                    bundles.Add(new Tuple<String, String>("dataManagerConfig", file));
+                }
+                if (text.Contains("id=\"TransferFunctionWithNegatoEditor\""))
+                {
+                    bundles.Add(new Tuple<String, String>("imageConfig", file));
+                }
+                if (text.Contains("id=\"TransferFunctionWidget\""))
+                {
+                    bundles.Add(new Tuple<String, String>("qtSceneConfig", file));
+                }
+                if (text.Contains("id=\"OgreIDVRManager\""))
+                {
+                    bundles.Add(new Tuple<String, String>("configOgreEx", file));
+                }
+                if (text.Contains("id=\"landmarkModelSeriesView\"") ||
+                    text.Contains("id=\"manualRegistrationView\""))
+                {
+                    bundles.Add(new Tuple<String, String>("modelSeriesConfig", file));
+                }
+            }
+
+            return bundles;
+        }
+
+        /// <summary>
+        /// Get bundles related to cpp/hpp/c/h files
+        /// </summary>
+        /// <returns>The list of require bundles</returns>
+        public static List<Tuple<String, String>> getIncludeBundles(String _rep)
+        {
+            List<String> languageFiles = getLanguageFiles(_rep);
+
+            List<Tuple<String, String>> bundles = new List<Tuple<String, String>>();
+            foreach (String file in languageFiles)
+            {
+                List<String> requirements = getIncludes(file);
+
+                foreach (String s in requirements)
+                {
+                    bundles.Add(new Tuple<String, String>(s, file));
+                }
+            }
+
+            return bundles;
+        }
+
         /*
-         * Commun
-         */
+        * Commun utils fnctions
+        */
 
         /// <summary>
         /// Get all xml file names in a directory
         /// </summary>
         /// <param name="_rep">The directory</param>
         /// <returns>The list af all file names</returns>
-        static List<String> getXMLFiles(String _rep)
+        private static List<String> getXMLFiles(String _rep)
         {
             List<String> xmlFiles = new List<string>();
             foreach (String dir in Directory.GetDirectories(_rep))
