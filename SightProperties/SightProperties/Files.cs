@@ -297,7 +297,7 @@ namespace SightProperties
         /// </summary>
         /// <param name="_rep">The directory</param>
         /// <returns>The list af all file names</returns>
-        static List<String> getLanguageFiles(String _rep)
+        public static List<String> getLanguageFiles(String _rep)
         {
             List<String> languageFiles = new List<string>();
             foreach (String dir in Directory.GetDirectories(_rep))
