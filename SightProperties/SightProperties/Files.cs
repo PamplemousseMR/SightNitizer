@@ -206,6 +206,10 @@ namespace SightProperties
                 {
                     bundles.Add(new Tuple<String, String>("perfusionMedia", file));
                 }
+                if (text.Contains("icon=\"resources") || text.Contains("<icon>resources"))
+                {
+                    bundles.Add(new Tuple<String, String>("resources", file));
+                }
             }
 
             return bundles;
@@ -255,7 +259,7 @@ namespace SightProperties
         /// </summary>
         /// <param name="_doc">The xml file</param>
         /// <returns>The list of all services</returns>
-        static List<String> getServices(XmlDocument _doc)
+        private static List<String> getServices(XmlDocument _doc)
         {
             List<String> services = new List<String>();
             XmlNodeList serviceNodes = _doc.DocumentElement.GetElementsByTagName("service");
@@ -274,7 +278,7 @@ namespace SightProperties
         /// </summary>
         /// <param name="_service">The name of the service</param>
         /// <returns>The name of the bundle</returns>
-        static String extractBundle(String _service)
+        private static String extractBundle(String _service)
         {
             int end = _service.Substring(2).IndexOf(":");
             return _service.Substring(2, end);
@@ -289,7 +293,7 @@ namespace SightProperties
         /// </summary>
         /// <param name="_doc">The xml file</param>
         /// <returns>The list of all object</returns>
-        static List<String> getObjects(XmlDocument _doc)
+        private static List<String> getObjects(XmlDocument _doc)
         {
             List<String> objects = new List<String>();
             XmlNodeList objectNodes = _doc.DocumentElement.GetElementsByTagName("object");
@@ -308,7 +312,7 @@ namespace SightProperties
         /// </summary>
         /// <param name="_doc">The xml file</param>
         /// <returns>The list of all object</returns>
-        static List<String> getRequirement(XmlDocument _doc)
+        private static List<String> getRequirement(XmlDocument _doc)
         {
             List<String> requirements = new List<String>();
             XmlNodeList requirementNodes = _doc.DocumentElement.GetElementsByTagName("requirement");
@@ -327,7 +331,7 @@ namespace SightProperties
         /// </summary>
         /// <param name="_file">The language file</param>
         /// <returns>The list of all bundles</returns>
-        static List<String> getIncludes(String _file)
+        private static List<String> getIncludes(String _file)
         {
             List<String> bundles = new List<String>();
 

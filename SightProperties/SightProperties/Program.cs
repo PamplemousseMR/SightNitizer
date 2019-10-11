@@ -149,7 +149,7 @@ namespace SightProperties
             ///========================================================================================================
             foreach (Tuple<String, String> bundle in languagesBundles)
             {
-                /// Skip external libraries
+                /// Skip external libraries and the current one
                 if (bundle.Item1.CompareTo(currentName) != 0 &&
                     bundle.Item1.CompareTo("boost") != 0 &&
                     bundle.Item1.CompareTo("OGRE") != 0 &&
