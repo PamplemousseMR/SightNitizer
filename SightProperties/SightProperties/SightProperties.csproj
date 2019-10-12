@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Files.cs" />
+    <Compile Include="Language.cs" />
+    <Compile Include="Xml.cs" />
     <Compile Include="Properties.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="Program.cs" />

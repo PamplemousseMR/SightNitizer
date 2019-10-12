@@ -18,20 +18,20 @@ namespace SightProperties
             String currentName = path[path.Length - 1];
 
             /// Get bundles list of xml files
-            List<Tuple<String, String>> xmlBundles = Files.getDefaultBundles(Option.getDirectory());
-            xmlBundles.AddRange(Files.getRequireBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Files.getObjectsBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Files.getOgreBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Files.getVTKBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Files.getStandardBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Files.getMediaBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Files.getAppConfigBundles(Option.getDirectory()));
+            List<Tuple<String, String>> xmlBundles = Xml.getDefaultBundles(Option.getDirectory());
+            xmlBundles.AddRange(Xml.getRequireBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Xml.getObjectsBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Xml.getOgreBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Xml.getVTKBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Xml.getStandardBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Xml.getMediaBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Xml.getAppConfigBundles(Option.getDirectory()));
 
             /// Get require bundles in xml files
-            List<Tuple<String, String>> xmlRequirements = Files.getRequireBundles(Option.getDirectory());
+            List<Tuple<String, String>> xmlRequirements = Xml.getRequireBundles(Option.getDirectory());
 
             /// Get bundles list of languages files
-            List<Tuple<String, String>> languagesBundles = Files.getIncludeBundles(Option.getDirectory());
+            List<Tuple<String, String>> languagesBundles = Language.getIncludeBundles(Option.getDirectory());
 
             /// Get Properties.cmake
             String propertiesFile = Option.getDirectory() + "\\Properties.cmake";
@@ -46,10 +46,13 @@ namespace SightProperties
             List<String> propertiesDependencies = Properties.getDependencies(propertiesFile);
 
             ///========================================================================================================
-            /// Check that appxml and fwlauncher are in the Properties.cmake in case of APP type bundles
+            /// In case of APP type bundles
             ///========================================================================================================
             if (propertiesType.CompareTo("APP") == 0)
             {
+                ///========================================================================================================
+                /// Check that appxml and fwlauncher are in the Properties.cmake
+                ///========================================================================================================
                 bool findAppXml = false;
                 bool findFwlauncher = false;
                 foreach (String propertiesRequirement in propertiesRequirements)
@@ -74,6 +77,49 @@ namespace SightProperties
                 if (!findFwlauncher)
                 {
                     Console.WriteLine("The bundle: `fwlauncher` was not found in the file: `" + propertiesFile + "`");
+                }
+
+                ///========================================================================================================
+                /// Check that bundle in xml file are properly started (requirement in xml files)
+                ///========================================================================================================
+                foreach (String propertiesRequirement in propertiesRequirements)
+                {
+                    if (propertiesRequirement.CompareTo("validators") == 0 ||
+                        propertiesRequirement.CompareTo("filterUnknownSeries") == 0 ||
+                        propertiesRequirement.CompareTo("filterVRRender") == 0 ||
+                        propertiesRequirement.CompareTo("activities") == 0 ||
+                        propertiesRequirement.CompareTo("arDataReg") == 0 ||
+                        propertiesRequirement.CompareTo("dataReg") == 0 ||
+                        propertiesRequirement.CompareTo("memory") == 0 ||
+                        propertiesRequirement.CompareTo("preferences") == 0 ||
+                        propertiesRequirement.CompareTo("servicesReg") == 0 ||
+                        propertiesRequirement.CompareTo("ioDicomWeb") == 0 ||
+                        propertiesRequirement.CompareTo("ioPacs") == 0 ||
+                        propertiesRequirement.CompareTo("arPatchMedicalData") == 0 ||
+                        propertiesRequirement.CompareTo("patchMedicalData") == 0 ||
+                        propertiesRequirement.CompareTo("console") == 0 ||
+                        propertiesRequirement.CompareTo("guiQt") == 0 ||
+                        propertiesRequirement.CompareTo("scene2D") == 0 ||
+                        propertiesRequirement.CompareTo("visuOgre") == 0 ||
+                        propertiesRequirement.CompareTo("material") == 0 ||
+                        propertiesRequirement.CompareTo("visuVTKQml") == 0 ||
+                        propertiesRequirement.CompareTo("visuVTKQt") == 0)
+                    {
+                        bool find = false;
+                        foreach (Tuple<String, String> requirement in xmlRequirements)
+                        {
+                            if (propertiesRequirement.CompareTo(requirement.Item1) == 0)
+                            {
+                                find = true;
+                                break;
+                            }
+                        }
+
+                        if (!find)
+                        {
+                            Console.WriteLine("The bundle: `" + propertiesRequirement + "` need to be in the xml's requirements list");
+                        }
+                    }
                 }
             }
 
@@ -101,49 +147,6 @@ namespace SightProperties
                     if (!find)
                     {
                         Console.WriteLine("The bundle: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the file: `" + propertiesFile + "`");
-                    }
-                }
-            }
-
-            ///========================================================================================================
-            /// Check that bundle in xml file are properly started (requirement in xml files)
-            ///========================================================================================================
-            foreach (String propertiesRequirement in propertiesRequirements)
-            {
-                if (propertiesRequirement.CompareTo("validators") == 0 ||
-                    propertiesRequirement.CompareTo("filterUnknownSeries") == 0 ||
-                    propertiesRequirement.CompareTo("filterVRRender") == 0 ||
-                    propertiesRequirement.CompareTo("activities") == 0 ||
-                    propertiesRequirement.CompareTo("arDataReg") == 0 ||
-                    propertiesRequirement.CompareTo("dataReg") == 0 ||
-                    propertiesRequirement.CompareTo("memory") == 0 ||
-                    propertiesRequirement.CompareTo("preferences") == 0 ||
-                    propertiesRequirement.CompareTo("servicesReg") == 0 ||
-                    propertiesRequirement.CompareTo("ioDicomWeb") == 0 ||
-                    propertiesRequirement.CompareTo("ioPacs") == 0 ||
-                    propertiesRequirement.CompareTo("arPatchMedicalData") == 0 ||
-                    propertiesRequirement.CompareTo("patchMedicalData") == 0 ||
-                    propertiesRequirement.CompareTo("console") == 0 ||
-                    propertiesRequirement.CompareTo("guiQt") == 0 ||
-                    propertiesRequirement.CompareTo("scene2D") == 0 ||
-                    propertiesRequirement.CompareTo("visuOgre") == 0 ||
-                    propertiesRequirement.CompareTo("material") == 0 ||
-                    propertiesRequirement.CompareTo("visuVTKQml") == 0 ||
-                    propertiesRequirement.CompareTo("visuVTKQt") == 0)
-                {
-                    bool find = false;
-                    foreach (Tuple<String, String> requirement in xmlRequirements)
-                    {
-                        if (propertiesRequirement.CompareTo(requirement.Item1) == 0)
-                        {
-                            find = true;
-                            break;
-                        }
-                    }
-
-                    if (!find)
-                    {
-                        Console.WriteLine("The bundle: `" + propertiesRequirement + "` need to be in the xml's requirements list");
                     }
                 }
             }
