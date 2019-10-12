@@ -26,6 +26,8 @@ namespace SightProperties
             xmlBundles.AddRange(Xml.getStandardBundles(Option.getDirectory()));
             xmlBundles.AddRange(Xml.getMediaBundles(Option.getDirectory()));
             xmlBundles.AddRange(Xml.getAppConfigBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Xml.getServiceConfigBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Xml.getActivitiesBundles(Option.getDirectory()));
 
             /// Get require bundles in xml files
             List<Tuple<String, String>> xmlRequirements = Xml.getRequireBundles(Option.getDirectory());
