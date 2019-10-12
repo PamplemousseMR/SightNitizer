@@ -195,22 +195,26 @@ namespace SightProperties
             requirementsAnDependencies.AddRange(propertiesDependencies);
             foreach(String requirementOrDependency in requirementsAnDependencies)
             {
-                bool find = false;
-                foreach(Tuple<String, String> bundleOrLibrary in bundlesAndLibraries)
+                /// Skip IO bundles, these bundles are used by SIOSelector
+                if (!requirementOrDependency.StartsWith("io"))
                 {
-                    if(requirementOrDependency.CompareTo(bundleOrLibrary.Item1) == 0)
+                    bool find = false;
+                    foreach (Tuple<String, String> bundleOrLibrary in bundlesAndLibraries)
                     {
-                        find = true;
-                        break;
+                        if (requirementOrDependency.CompareTo(bundleOrLibrary.Item1) == 0)
+                        {
+                            find = true;
+                            break;
+                        }
                     }
-                }
-                /// If the bundle is appXml or fwlauncher, it can't be used.
-                /// These bundle must be here only in APP type bundles.
-                if (!((requirementOrDependency.CompareTo("appXml") == 0 || requirementOrDependency.CompareTo("fwlauncher") == 0) && propertiesType.CompareTo("APP") == 0))
-                {
-                    if (!find)
+                    /// If the bundle is appXml or fwlauncher, it can't be used.
+                    /// These bundle must be here only in APP type bundles.
+                    if (!((requirementOrDependency.CompareTo("appXml") == 0 || requirementOrDependency.CompareTo("fwlauncher") == 0) && propertiesType.CompareTo("APP") == 0))
                     {
-                        Console.WriteLine("The library/bundle: `" + requirementOrDependency + "` is not used");
+                        if (!find)
+                        {
+                            Console.WriteLine("The library/bundle: `" + requirementOrDependency + "` is not used");
+                        }
                     }
                 }
             }
