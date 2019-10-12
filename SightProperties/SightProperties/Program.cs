@@ -162,13 +162,30 @@ namespace SightProperties
                 /// Skip external libraries and the current one
                 if (bundle.Item1.CompareTo(currentName) != 0 &&
                     bundle.Item1.CompareTo("boost") != 0 &&
+                    bundle.Item1.CompareTo("camp") != 0 &&
+                    bundle.Item1.CompareTo("ceres") != 0 &&
+                    bundle.Item1.CompareTo("cppunit") != 0 &&
+                    bundle.Item1.CompareTo("dcmtk") != 0 &&
+                    bundle.Item1.CompareTo("Eigen") != 0 &&
+                    bundle.Item1.CompareTo("glm") != 0 &&
+                    bundle.Item1.CompareTo("librealsense2") != 0 &&
+                    bundle.Item1.CompareTo("libxml") != 0 &&
                     bundle.Item1.CompareTo("OGRE") != 0 &&
                     bundle.Item1.CompareTo("GL") != 0 &&
                     bundle.Item1.CompareTo("OpenGL") != 0 &&
-                    bundle.Item1.CompareTo("glm") != 0 &&
-                    bundle.Item1.CompareTo("cppunit") != 0 &&
                     bundle.Item1.CompareTo("opencv2") != 0 &&
-                    bundle.Item1.CompareTo("ceres") != 0)
+                    bundle.Item1.CompareTo("OpenNI") != 0 &&
+                    bundle.Item1.CompareTo("pcl") != 0 &&
+                    bundle.Item1.CompareTo("vtk") != 0 &&
+                    bundle.Item1.CompareTo("vlc") != 0 &&
+                    bundle.Item1.CompareTo("IPPE") != 0 &&
+                    bundle.Item1.CompareTo("cryptopp") != 0 &&
+                    bundle.Item1.CompareTo("glog") != 0 &&
+                    bundle.Item1.CompareTo("odil") != 0 &&
+                    bundle.Item1.CompareTo("sofa") != 0 &&
+                    bundle.Item1.CompareTo("tetgen") != 0 &&
+                    bundle.Item1.CompareTo("trakSTAR") != 0 &&
+                    bundle.Item1.CompareTo("grpc++") != 0)
                 {
                     bool find = false;
                     foreach (String dependenci in propertiesDependencies)
