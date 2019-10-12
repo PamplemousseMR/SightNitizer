@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SightProperties
 {
@@ -195,8 +196,9 @@ namespace SightProperties
             requirementsAnDependencies.AddRange(propertiesDependencies);
             foreach(String requirementOrDependency in requirementsAnDependencies)
             {
-                /// Skip IO bundles, these bundles are used by SIOSelector
-                if (!requirementOrDependency.StartsWith("io"))
+                /// Skip 'IO' bundles, these bundles are used by SIOSelector
+                /// Skip 'style' bundles, this bundle is used in a weird way and will be checked bellow
+                if (!(requirementOrDependency.StartsWith("io") || (requirementOrDependency.CompareTo("style") == 0)))
                 {
                     bool find = false;
                     foreach (Tuple<String, String> bundleOrLibrary in bundlesAndLibraries)
@@ -207,7 +209,7 @@ namespace SightProperties
                             break;
                         }
                     }
-                    /// If the bundle is appXml or fwlauncher, it can't be used.
+                    /// If the bundle is 'appXml' or 'fwlauncher', it can't be used.
                     /// These bundle must be here only in APP type bundles.
                     if (!((requirementOrDependency.CompareTo("appXml") == 0 || requirementOrDependency.CompareTo("fwlauncher") == 0) && propertiesType.CompareTo("APP") == 0))
                     {
@@ -216,6 +218,18 @@ namespace SightProperties
                             Console.WriteLine("The library/bundle: `" + requirementOrDependency + "` is not used");
                         }
                     }
+                }
+            }
+
+            ///========================================================================================================
+            /// Check 'style' bundle here
+            ///========================================================================================================
+            if(requirementsAnDependencies.Contains("style"))
+            {
+                String text = File.ReadAllText(propertiesFile);
+                if(!text.Contains("style-0.1"))
+                {
+                    Console.WriteLine("The bundle: `style` is not used");
                 }
             }
         }
