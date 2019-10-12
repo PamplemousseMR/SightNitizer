@@ -849,6 +849,12 @@ namespace SightProperties
             return requirements;
         }
 
+        /// <summary>
+        /// Check if a serviceDonfig, appConfig or activity is used
+        /// </summary>
+        /// <param name="_text">The file as text</param>
+        /// <param name="_keyword">The keyword to find</param>
+        /// <returns>True if the keyword is founded</returns>
         private static bool checkId(String _text, String _keyword)
         {
             return (_text.Contains("id=\"" + _keyword + "\"") || _text.Contains("<id>" + _keyword + "</id>"));
