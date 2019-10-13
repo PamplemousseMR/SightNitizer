@@ -27,10 +27,6 @@ namespace SightProperties
                 {
                     bundles.Add(new Tuple<String, String>("activities", file));
                 }
-                if (text.Contains("::fwRenderQt::"))
-                {
-                    bundles.Add(new Tuple<String, String>("scene2D", file));
-                }
             }
 
             return bundles;
@@ -94,6 +90,27 @@ namespace SightProperties
                     {
                         bundles.Add(new Tuple<String, String>("brDataReg", file));
                     }
+                }
+            }
+
+            return bundles;
+        }
+
+        /// <summary>
+        /// Get bundles related to qt
+        /// </summary>
+        /// <returns>The list of require bundles</returns>
+        public static List<Tuple<String, String>> getQtBundles(String _rep)
+        {
+            List<String> xmlFiles = getXMLFiles(_rep);
+
+            List<Tuple<String, String>> bundles = new List<Tuple<String, String>>();
+            foreach (String file in xmlFiles)
+            {
+                String text = File.ReadAllText(file);
+                if (text.Contains("::fwRenderQt::SRender"))
+                {
+                    bundles.Add(new Tuple<String, String>("scene2D", file));
                 }
             }
 
@@ -766,7 +783,7 @@ namespace SightProperties
         /// </summary>
         /// <param name="_rep">The directory</param>
         /// <returns>The list af all file names</returns>
-        private static List<String> getXMLFiles(String _rep)
+        public static List<String> getXMLFiles(String _rep)
         {
             List<String> xmlFiles = new List<string>();
             foreach (String dir in Directory.GetDirectories(_rep))

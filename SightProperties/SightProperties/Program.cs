@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 
 namespace SightProperties
 {
@@ -23,6 +24,7 @@ namespace SightProperties
             xmlBundles.AddRange(Xml.getRequireBundles(Option.getDirectory()));
             xmlBundles.AddRange(Xml.getObjectsBundles(Option.getDirectory()));
             xmlBundles.AddRange(Xml.getOgreBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Xml.getQtBundles(Option.getDirectory()));
             xmlBundles.AddRange(Xml.getVTKBundles(Option.getDirectory()));
             xmlBundles.AddRange(Xml.getStandardBundles(Option.getDirectory()));
             xmlBundles.AddRange(Xml.getMediaBundles(Option.getDirectory()));
@@ -185,6 +187,8 @@ namespace SightProperties
                     bundle.Item1.CompareTo("sofa") != 0 &&
                     bundle.Item1.CompareTo("tetgen") != 0 &&
                     bundle.Item1.CompareTo("trakSTAR") != 0 &&
+                    bundle.Item1.CompareTo("BulletSoftBody") != 0 &&
+                    bundle.Item1.CompareTo("sys") != 0 &&
                     bundle.Item1.CompareTo("grpc++") != 0)
                 {
                     bool find = false;
@@ -247,6 +251,70 @@ namespace SightProperties
                 if(!text.Contains("style-0.1"))
                 {
                     Console.WriteLine("The bundle: `style` is not used");
+                }
+            }
+
+            ///========================================================================================================
+            /// Check that all services are used
+            ///========================================================================================================
+            List<String> xmlFiles = Xml.getXMLFiles(Option.getDirectory());
+            foreach (String file in xmlFiles)
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(file);
+
+                XmlNodeList serviceNodes = doc.DocumentElement.GetElementsByTagName("service");
+                
+                /// Retreive all services uid
+                List<String> servicesUid = new List<String>();
+                foreach (XmlNode serviceAtt in serviceNodes)
+                {
+                    if (serviceAtt.Attributes["uid"] != null)
+                    {
+                        servicesUid.Add(serviceAtt.Attributes["uid"].InnerText);
+                    }
+                }
+
+                foreach (String serviceUid in servicesUid)
+                {
+                    Boolean find = false;
+                    foreach (XmlNode serviceAtt in serviceNodes)
+                    {
+                        StringWriter sw = new StringWriter();
+                        XmlTextWriter xw = new XmlTextWriter(sw);
+                        xw.Formatting = Formatting.Indented;
+                        serviceAtt.WriteTo(xw);
+                        /// The first line contain the uid, we must remove it
+                        String service = sw.ToString();
+                        service = service.Substring(service.IndexOf(Environment.NewLine) + 1);
+                        if(service.Contains(serviceUid))
+                        {
+                            find = true;
+                            break;
+                        }
+                    }
+
+                    /// If it's not used in others services, it can be just started
+                    if (!find)
+                    {
+                        XmlNodeList startNodes = doc.DocumentElement.GetElementsByTagName("start");
+                        foreach (XmlNode startAtt in startNodes)
+                        {
+                            if (startAtt.Attributes["uid"] != null)
+                            {
+                                if (startAtt.Attributes["uid"].InnerText.CompareTo(serviceUid) == 0)
+                                {
+                                    find = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!find)
+                    {
+                        Console.WriteLine("The service: `" + serviceUid + "` is not used in the file '" + file + "'");
+                    }
                 }
             }
         }
