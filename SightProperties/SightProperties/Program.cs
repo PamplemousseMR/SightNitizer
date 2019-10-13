@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -10,7 +10,7 @@ namespace SightProperties
         static void Main(String[] _args)
         {
             /// Parse args
-            if(!Option.parse(_args))
+            if (!Option.parse(_args))
             {
                 Environment.Exit(1);
             }
@@ -75,7 +75,7 @@ namespace SightProperties
                         findFwlauncher = true;
                     }
                 }
-                if(!findAppXml)
+                if (!findAppXml)
                 {
                     Console.WriteLine("The bundle: `appXml` was not found in the file: `" + propertiesFile + "`");
                 }
@@ -215,7 +215,7 @@ namespace SightProperties
 
             List<String> requirementsAnDependencies = propertiesRequirements;
             requirementsAnDependencies.AddRange(propertiesDependencies);
-            foreach(String requirementOrDependency in requirementsAnDependencies)
+            foreach (String requirementOrDependency in requirementsAnDependencies)
             {
                 /// Skip 'IO' bundles, these bundles are used by SIOSelector
                 /// Skip 'style' bundles, this bundle is used in a weird way and will be checked bellow
@@ -245,10 +245,10 @@ namespace SightProperties
             ///========================================================================================================
             /// Check 'style' bundle here
             ///========================================================================================================
-            if(requirementsAnDependencies.Contains("style"))
+            if (requirementsAnDependencies.Contains("style"))
             {
                 String text = File.ReadAllText(propertiesFile);
-                if(!text.Contains("style-0.1"))
+                if (!text.Contains("style-0.1"))
                 {
                     Console.WriteLine("The bundle: `style` is not used");
                 }
@@ -264,7 +264,7 @@ namespace SightProperties
                 doc.Load(file);
 
                 XmlNodeList serviceNodes = doc.DocumentElement.GetElementsByTagName("service");
-                
+
                 /// Retreive all services uid
                 List<String> servicesUid = new List<String>();
                 foreach (XmlNode serviceAtt in serviceNodes)
@@ -287,7 +287,7 @@ namespace SightProperties
                         /// The first line contain the uid, we must remove it
                         String service = sw.ToString();
                         service = service.Substring(service.IndexOf(Environment.NewLine) + 1);
-                        if(service.Contains(serviceUid))
+                        if (service.Contains(serviceUid))
                         {
                             find = true;
                             break;
@@ -314,6 +314,81 @@ namespace SightProperties
                     if (!find)
                     {
                         Console.WriteLine("The service: `" + serviceUid + "` is not used in the file '" + file + "'");
+                    }
+                }
+            }
+
+            ///========================================================================================================
+            /// Check that all objects are used
+            ///========================================================================================================
+            foreach (String file in xmlFiles)
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(file);
+
+                XmlNodeList objectNodes = doc.DocumentElement.GetElementsByTagName("object");
+
+                /// Retreive all objects uid
+                List<String> objectsUid = new List<String>();
+                foreach (XmlNode objectAtt in objectNodes)
+                {
+                    if (objectAtt.Attributes["uid"] != null)
+                    {
+                        objectsUid.Add(objectAtt.Attributes["uid"].InnerText);
+                    }
+                }
+
+                foreach (String objectUid in objectsUid)
+                {
+                    Boolean find = false;
+                    XmlNodeList inoutNodes = doc.DocumentElement.GetElementsByTagName("inout");
+                    foreach (XmlNode inoutAtt in inoutNodes)
+                    {
+                        if (inoutAtt.Attributes["uid"] != null)
+                        {
+                            if (inoutAtt.Attributes["uid"].InnerText.CompareTo(objectUid) == 0)
+                            {
+                                find = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!find)
+                    {
+                        XmlNodeList inNodes = doc.DocumentElement.GetElementsByTagName("in");
+                        foreach (XmlNode inAtt in inNodes)
+                        {
+                            if (inAtt.Attributes["uid"] != null)
+                            {
+                                if (inAtt.Attributes["uid"].InnerText.CompareTo(objectUid) == 0)
+                                {
+                                    find = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!find)
+                    {
+                        XmlNodeList outNodes = doc.DocumentElement.GetElementsByTagName("out");
+                        foreach (XmlNode outAtt in outNodes)
+                        {
+                            if (outAtt.Attributes["uid"] != null)
+                            {
+                                if (outAtt.Attributes["uid"].InnerText.CompareTo(objectUid) == 0)
+                                {
+                                    find = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!find)
+                    {
+                        Console.WriteLine("The object: `" + objectUid + "` is not used in the file '" + file + "'");
                     }
                 }
             }
