@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace SightProperties
@@ -389,6 +390,35 @@ namespace SightProperties
                     if (!find)
                     {
                         Console.WriteLine("The object: `" + objectUid + "` is not used in the file '" + file + "'");
+                    }
+                }
+            }
+
+            ///========================================================================================================
+            /// Check that all channel are used
+            ///========================================================================================================
+            foreach (String file in xmlFiles)
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(file);
+
+                XmlNodeList connectNodes = doc.DocumentElement.GetElementsByTagName("connect");
+
+                String text = File.ReadAllText(file);
+
+                /// Retreive all channel uid
+                List<String> channelsUid = new List<String>();
+                foreach (XmlNode connectAtt in connectNodes)
+                {
+                    if (connectAtt.Attributes["channel"] != null)
+                    {
+                        String channel = connectAtt.Attributes["channel"].InnerText;
+                        channel = channel.Replace("${", "");
+                        channel = channel.Replace("}", "");
+                        if (Regex.Matches(text, channel).Count <= 1)
+                        {
+                            Console.WriteLine("The channel: `" + channel + "` is not used in the file '" + file + "'");
+                        }
                     }
                 }
             }
