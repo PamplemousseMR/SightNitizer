@@ -90,6 +90,7 @@ namespace SightProperties
                 ///========================================================================================================
                 foreach (String propertiesRequirement in propertiesRequirements)
                 {
+                    /// List of bundle that require a starting
                     if (propertiesRequirement.CompareTo("validators") == 0 ||
                         propertiesRequirement.CompareTo("filterUnknownSeries") == 0 ||
                         propertiesRequirement.CompareTo("filterVRRender") == 0 ||
@@ -248,6 +249,7 @@ namespace SightProperties
             ///========================================================================================================
             if (requirementsAnDependencies.Contains("style"))
             {
+                /// The 'style' bundle is used in the properties.cmake files
                 String text = File.ReadAllText(propertiesFile);
                 if (!text.Contains("style-0.1"))
                 {
@@ -276,6 +278,7 @@ namespace SightProperties
                     }
                 }
 
+                /// Check that each service is use in others services
                 foreach (String serviceUid in servicesUid)
                 {
                     Boolean find = false;
@@ -339,6 +342,7 @@ namespace SightProperties
                     }
                 }
 
+                /// Check that this object is used in a 'inout'
                 foreach (String objectUid in objectsUid)
                 {
                     Boolean find = false;
@@ -355,6 +359,7 @@ namespace SightProperties
                         }
                     }
 
+                    /// Check that this object is used in a 'in'
                     if (!find)
                     {
                         XmlNodeList inNodes = doc.DocumentElement.GetElementsByTagName("in");
@@ -371,6 +376,7 @@ namespace SightProperties
                         }
                     }
 
+                    /// Check that this object is used in a 'out'
                     if (!find)
                     {
                         XmlNodeList outNodes = doc.DocumentElement.GetElementsByTagName("out");
@@ -413,8 +419,10 @@ namespace SightProperties
                     if (connectAtt.Attributes["channel"] != null)
                     {
                         String channel = connectAtt.Attributes["channel"].InnerText;
+                        /// Remove the reference, the channel can be used as parameter
                         channel = channel.Replace("${", "");
                         channel = channel.Replace("}", "");
+                        /// If the channel is used only once, it's not used
                         if (Regex.Matches(text, channel).Count <= 1)
                         {
                             Console.WriteLine("The channel: `" + channel + "` is not used in the file '" + file + "'");
