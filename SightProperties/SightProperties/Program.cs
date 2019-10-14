@@ -221,7 +221,12 @@ namespace SightProperties
             {
                 /// Skip 'IO' bundles, these bundles are used by SIOSelector
                 /// Skip 'style' bundles, this bundle is used in a weird way and will be checked bellow
-                if (!(requirementOrDependency.StartsWith("io") || (requirementOrDependency.CompareTo("style") == 0)))
+                /// Skip 'uiTF' bundles, this bundle contains files for pre-defined TF
+                if (!(
+                    requirementOrDependency.StartsWith("io") || 
+                    (requirementOrDependency.CompareTo("style") == 0) ||
+                    (requirementOrDependency.CompareTo("uiTF") == 0)
+                    ))
                 {
                     bool find = false;
                     foreach (Tuple<String, String> bundleOrLibrary in bundlesAndLibraries)
@@ -256,6 +261,10 @@ namespace SightProperties
                     Console.WriteLine("The bundle: `style` is not used");
                 }
             }
+
+            ///========================================================================================================
+            /// TODO, check IO bundles, video bundles, ioTF
+            ///========================================================================================================
 
             ///========================================================================================================
             /// Check that all services are used
