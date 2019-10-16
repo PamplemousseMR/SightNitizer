@@ -181,7 +181,7 @@ namespace SightProperties
                 XmlDocument doc = new XmlDocument();
                 doc.Load(file);
 
-                List<String> services = getServices(doc);
+                List<String> services = getServicesType(doc);
 
                 foreach (String s in services)
                 {
@@ -796,8 +796,46 @@ namespace SightProperties
             return bundles;
         }
 
+        /// <summary>
+        /// Get all services uid from an xml file
+        /// </summary>
+        /// <param name="_doc">The xml file</param>
+        /// <returns>The list of all services uid</returns>
+        public static List<String> getServicesUid(XmlDocument _doc)
+        {
+            XmlNodeList serviceNodes = _doc.DocumentElement.GetElementsByTagName("service");
+            List<String> servicesUid = new List<String>();
+            foreach (XmlNode serviceAtt in serviceNodes)
+            {
+                if (serviceAtt.Attributes["uid"] != null)
+                {
+                    servicesUid.Add(serviceAtt.Attributes["uid"].InnerText);
+                }
+            }
+            return servicesUid;
+        }
+
+        /// <summary>
+        /// Get all object uid from an xml file
+        /// </summary>
+        /// <param name="_doc">The xml file</param>
+        /// <returns>The list of all object uid</returns>
+        public static List<String> getObjectUid(XmlDocument _doc)
+        {
+            XmlNodeList serviceNodes = _doc.DocumentElement.GetElementsByTagName("object");
+            List<String> servicesUid = new List<String>();
+            foreach (XmlNode serviceAtt in serviceNodes)
+            {
+                if (serviceAtt.Attributes["uid"] != null)
+                {
+                    servicesUid.Add(serviceAtt.Attributes["uid"].InnerText);
+                }
+            }
+            return servicesUid;
+        }
+
         /*
-        * Commun utils fnctions
+        * Commun utils functions
         */
 
         /// <summary>
@@ -817,11 +855,11 @@ namespace SightProperties
         }
 
         /// <summary>
-        /// Get all services from an xml file
+        /// Get all services type from an xml file
         /// </summary>
         /// <param name="_doc">The xml file</param>
-        /// <returns>The list of all services</returns>
-        private static List<String> getServices(XmlDocument _doc)
+        /// <returns>The list of all services type</returns>
+        private static List<String> getServicesType(XmlDocument _doc)
         {
             List<String> services = new List<String>();
             XmlNodeList serviceNodes = _doc.DocumentElement.GetElementsByTagName("service");

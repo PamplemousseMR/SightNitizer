@@ -222,7 +222,6 @@ namespace SightProperties
             requirementsAnDependencies.AddRange(propertiesDependencies);
             foreach (String requirementOrDependency in requirementsAnDependencies)
             {
-                /// Skip 'IO' bundles, these bundles are used by SIOSelector
                 /// Skip 'style' bundles, this bundle is used in a weird way and will be checked bellow
                 /// Skip 'uiTF' bundles, this bundle contains files for pre-defined TF
                 if (!(
@@ -278,16 +277,7 @@ namespace SightProperties
                 doc.Load(file);
 
                 XmlNodeList serviceNodes = doc.DocumentElement.GetElementsByTagName("service");
-
-                /// Retreive all services uid
-                List<String> servicesUid = new List<String>();
-                foreach (XmlNode serviceAtt in serviceNodes)
-                {
-                    if (serviceAtt.Attributes["uid"] != null)
-                    {
-                        servicesUid.Add(serviceAtt.Attributes["uid"].InnerText);
-                    }
-                }
+                List<String> servicesUid = Xml.getServicesUid(doc);
 
                 /// Check that each service is use in others services
                 foreach (String serviceUid in servicesUid)
@@ -341,17 +331,7 @@ namespace SightProperties
                 XmlDocument doc = new XmlDocument();
                 doc.Load(file);
 
-                XmlNodeList objectNodes = doc.DocumentElement.GetElementsByTagName("object");
-
-                /// Retreive all objects uid
-                List<String> objectsUid = new List<String>();
-                foreach (XmlNode objectAtt in objectNodes)
-                {
-                    if (objectAtt.Attributes["uid"] != null)
-                    {
-                        objectsUid.Add(objectAtt.Attributes["uid"].InnerText);
-                    }
-                }
+                List<String> objectsUid = Xml.getObjectUid(doc);
 
                 /// Check that this object is used in a 'inout'
                 foreach (String objectUid in objectsUid)
