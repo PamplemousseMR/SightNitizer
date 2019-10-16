@@ -810,6 +810,14 @@ namespace SightProperties
                     services.Add(serviceAtt.Attributes["type"].InnerText);
                 }
             }
+            XmlNodeList configNodes = _doc.DocumentElement.GetElementsByTagName("config");
+            foreach (XmlNode configAtt in configNodes)
+            {
+                if (configAtt.Attributes["service"] != null)
+                {
+                    services.Add(configAtt.Attributes["service"].InnerText);
+                }
+            }
             return services;
         }
 
