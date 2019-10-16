@@ -9,14 +9,14 @@ namespace SightProperties
 {
     class Option
     {
-        private static String s_DIRECTORY;
+        private static string s_DIRECTORY;
 
         /// <summary>
         /// Parse arguments
         /// </summary>
         /// <param name="_args">Arguments to parse</param>
         /// <returns>True if all arguments a valid</returns>
-        public static bool parse(String[] _args)
+        public static bool parse(string[] _args)
         {
             bool isValid = true;
             if(_args.Length <= 0)
@@ -45,7 +45,7 @@ namespace SightProperties
             return true;
         }
 
-        public static String getDirectory()
+        public static string getDirectory()
         {
             return s_DIRECTORY;
         }

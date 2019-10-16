@@ -11,17 +11,17 @@ namespace SightProperties
         /// </summary>
         /// <param name="_file">The properties file</param>
         /// <returns>The list of all bundles</returns>
-        public static List<String> getRequirements(String _file)
+        public static List<string> getRequirements(string _file)
         {
-            String[] lines = System.IO.File.ReadAllLines(_file);
-            List<String> cleanLines = new List<string>();
+            string[] lines = System.IO.File.ReadAllLines(_file);
+            List<string> cleanLines = new List<string>();
 
             bool add = false;
-            foreach (String line in lines)
+            foreach (string line in lines)
             {
                 int comment = line.IndexOf("#");
                 comment = comment < 0 ? line.Length : comment;
-                String noComment = line.Substring(0, comment);
+                string noComment = line.Substring(0, comment);
 
                 if (noComment.Contains("REQUIREMENTS"))
                 {
@@ -39,7 +39,7 @@ namespace SightProperties
 
                 if (add)
                 {
-                    String cleanLine = Regex.Replace(noComment, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+                    string cleanLine = Regex.Replace(noComment, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
                     if (cleanLine.Length > 0)
                     {
                         cleanLines.Add(cleanLine);
@@ -54,17 +54,17 @@ namespace SightProperties
         /// </summary>
         /// <param name="_file">The properties file</param>
         /// <returns>The list of all bundles</returns>
-        public static List<String> getDependencies(String _file)
+        public static List<string> getDependencies(string _file)
         {
-            String[] lines = System.IO.File.ReadAllLines(_file);
-            List<String> cleanLines = new List<string>();
+            string[] lines = System.IO.File.ReadAllLines(_file);
+            List<string> cleanLines = new List<string>();
 
             bool add = false;
-            foreach (String line in lines)
+            foreach (string line in lines)
             {
                 int comment = line.IndexOf("#");
                 comment = comment < 0 ? line.Length : comment;
-                String noComment = line.Substring(0, comment);
+                string noComment = line.Substring(0, comment);
 
                 if (noComment.Contains("DEPENDENCIES"))
                 {
@@ -82,7 +82,7 @@ namespace SightProperties
 
                 if (add)
                 {
-                    String cleanLine = Regex.Replace(noComment, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+                    string cleanLine = Regex.Replace(noComment, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
                     if (cleanLine.Length > 0)
                     {
                         cleanLines.Add(cleanLine);
@@ -97,20 +97,20 @@ namespace SightProperties
         /// </summary>
         /// <param name="_file">The properties file</param>
         /// <returns>The type of the directory</returns>
-        public static String getType(String _file)
+        public static string getType(string _file)
         {
-            String[] lines = System.IO.File.ReadAllLines(_file);
-            String type = "Unknow";
+            string[] lines = System.IO.File.ReadAllLines(_file);
+            string type = "Unknow";
 
-            foreach (String line in lines)
+            foreach (string line in lines)
             {
                 int comment = line.IndexOf("#");
                 comment = comment < 0 ? line.Length : comment;
-                String noComment = line.Substring(0, comment);
+                string noComment = line.Substring(0, comment);
 
                 if (noComment.Contains("TYPE"))
                 {
-                    String cleanLine = Regex.Replace(noComment, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+                    string cleanLine = Regex.Replace(noComment, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
                     type = cleanLine.Replace("setTYPE", "");
                 }
 
@@ -123,20 +123,20 @@ namespace SightProperties
         /// </summary>
         /// <param name="_file">The properties file</param>
         /// <returns>The name of the directory</returns>
-        public static String getName(String _file)
+        public static string getName(string _file)
         {
-            String[] lines = System.IO.File.ReadAllLines(_file);
-            String type = "Unknow";
+            string[] lines = System.IO.File.ReadAllLines(_file);
+            string type = "Unknow";
 
-            foreach (String line in lines)
+            foreach (string line in lines)
             {
                 int comment = line.IndexOf("#");
                 comment = comment < 0 ? line.Length : comment;
-                String noComment = line.Substring(0, comment);
+                string noComment = line.Substring(0, comment);
 
                 if (noComment.Contains("NAME"))
                 {
-                    String cleanLine = Regex.Replace(noComment, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+                    string cleanLine = Regex.Replace(noComment, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
                     type = cleanLine.Replace("setNAME", "");
                 }
 

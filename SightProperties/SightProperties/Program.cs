@@ -8,7 +8,7 @@ namespace SightProperties
 {
     class Program
     {
-        static void Main(String[] _args)
+        static void Main(string[] _args)
         {
             /// Parse args
             if (!Option.parse(_args))
@@ -17,16 +17,16 @@ namespace SightProperties
             }
 
             /// Get sight directories informations
-            String rootDirectory = Sight.getRootDirectory(Option.getDirectory());
-            List<String> sightDirectories = Sight.getSightDirectory(rootDirectory);
+            string rootDirectory = Sight.getRootDirectory(Option.getDirectory());
+            List<string> sightDirectories = Sight.getSightDirectory(rootDirectory);
 
             /// Retreive bundles with activities, app config and service config names
-            List<Tuple<String, List<String>>> activityBundles = new List<Tuple<String, List<String>>>();
-            List<Tuple<String, List<String>>> appConfigBundles = new List<Tuple<String, List<String>>>();
-            List<Tuple<String, List<String>>> serviceConfigBundles = new List<Tuple<String, List<String>>>();
-            foreach (String directory in sightDirectories)
+            List<Tuple<string, List<string>>> activityBundles = new List<Tuple<string, List<string>>>();
+            List<Tuple<string, List<string>>> appConfigBundles = new List<Tuple<string, List<string>>>();
+            List<Tuple<string, List<string>>> serviceConfigBundles = new List<Tuple<string, List<string>>>();
+            foreach (string directory in sightDirectories)
             {
-                foreach (String dir in Sight.getBundleDirectories(directory))
+                foreach (string dir in Sight.getBundleDirectories(directory))
                 {
                     activityBundles.Add(Sight.getActivitiesBundles(dir));
                     appConfigBundles.Add(Sight.getAppConfigBundles(dir));
@@ -35,11 +35,11 @@ namespace SightProperties
             }
 
             /// Get current libray/bundle name
-            String[] path = Option.getDirectory().Split('\\');
-            String currentName = path[path.Length - 1];
+            string[] path = Option.getDirectory().Split('\\');
+            string currentName = path[path.Length - 1];
 
             /// Get bundles list of xml files
-            List<Tuple<String, String>> xmlBundles = Xml.getDefaultBundles(Option.getDirectory());
+            List<Tuple<string, string>> xmlBundles = Xml.getDefaultBundles(Option.getDirectory());
             xmlBundles.AddRange(Xml.getRequireBundles(Option.getDirectory()));
             xmlBundles.AddRange(Xml.getObjectsBundles(Option.getDirectory()));
             xmlBundles.AddRange(Xml.getOgreBundles(Option.getDirectory()));
@@ -52,44 +52,44 @@ namespace SightProperties
             xmlBundles.AddRange(Xml.getExtensionBundles(Option.getDirectory(), serviceConfigBundles));
 
             /// Get require bundles in xml files
-            List<Tuple<String, String>> xmlRequirements = Xml.getRequireBundles(Option.getDirectory());
+            List<Tuple<string, string>> xmlRequirements = Xml.getRequireBundles(Option.getDirectory());
 
             /// Get bundles list of languages files
-            List<Tuple<String, String>> languagesBundles = Language.getIncludeBundles(Option.getDirectory());
+            List<Tuple<string, string>> languagesBundles = Language.getIncludeBundles(Option.getDirectory());
 
             /// Get Properties.cmake
-            String propertiesFile = Option.getDirectory() + "\\Properties.cmake";
+            string propertiesFile = Option.getDirectory() + "\\Properties.cmake";
 
             /// Get the type of the directory (APP/EXECUTABLE/BUNDLE/LIBRARY/TEST)
-            String propertiesType = Properties.getType(propertiesFile);
+            string propertiesType = Properties.getType(propertiesFile);
 
             /// Get the requirement list
-            List<String> propertiesRequirements = Properties.getRequirements(propertiesFile);
+            List<string> propertiesRequirements = Properties.getRequirements(propertiesFile);
 
             /// Get the dependencies list
-            List<String> propertiesDependencies = Properties.getDependencies(propertiesFile);
+            List<string> propertiesDependencies = Properties.getDependencies(propertiesFile);
 
             ///========================================================================================================
             /// In case of APP type bundles
             ///========================================================================================================
-            if (propertiesType.CompareTo("APP") == 0)
+            if (propertiesType == "APP")
             {
                 ///========================================================================================================
                 /// Check that appxml and fwlauncher are in the Properties.cmake
                 ///========================================================================================================
                 bool findAppXml = false;
                 bool findFwlauncher = false;
-                foreach (String propertiesRequirement in propertiesRequirements)
+                foreach (string propertiesRequirement in propertiesRequirements)
                 {
                     if (findAppXml && findFwlauncher)
                     {
                         break;
                     }
-                    if (propertiesRequirement.CompareTo("appXml") == 0)
+                    if (propertiesRequirement == "appXml")
                     {
                         findAppXml = true;
                     }
-                    else if (propertiesRequirement.CompareTo("fwlauncher") == 0)
+                    else if (propertiesRequirement == "fwlauncher")
                     {
                         findFwlauncher = true;
                     }
@@ -106,34 +106,34 @@ namespace SightProperties
                 ///========================================================================================================
                 /// Check that bundle in xml file are properly started (requirement in xml files)
                 ///========================================================================================================
-                foreach (String propertiesRequirement in propertiesRequirements)
+                foreach (string propertiesRequirement in propertiesRequirements)
                 {
                     /// List of bundle that require a starting
-                    if (propertiesRequirement.CompareTo("validators") == 0 ||
-                        propertiesRequirement.CompareTo("filterUnknownSeries") == 0 ||
-                        propertiesRequirement.CompareTo("filterVRRender") == 0 ||
-                        propertiesRequirement.CompareTo("activities") == 0 ||
-                        propertiesRequirement.CompareTo("arDataReg") == 0 ||
-                        propertiesRequirement.CompareTo("dataReg") == 0 ||
-                        propertiesRequirement.CompareTo("memory") == 0 ||
-                        propertiesRequirement.CompareTo("preferences") == 0 ||
-                        propertiesRequirement.CompareTo("servicesReg") == 0 ||
-                        propertiesRequirement.CompareTo("ioDicomWeb") == 0 ||
-                        propertiesRequirement.CompareTo("ioPacs") == 0 ||
-                        propertiesRequirement.CompareTo("arPatchMedicalData") == 0 ||
-                        propertiesRequirement.CompareTo("patchMedicalData") == 0 ||
-                        propertiesRequirement.CompareTo("console") == 0 ||
-                        propertiesRequirement.CompareTo("guiQt") == 0 ||
-                        propertiesRequirement.CompareTo("scene2D") == 0 ||
-                        propertiesRequirement.CompareTo("visuOgre") == 0 ||
-                        propertiesRequirement.CompareTo("material") == 0 ||
-                        propertiesRequirement.CompareTo("visuVTKQml") == 0 ||
-                        propertiesRequirement.CompareTo("visuVTKQt") == 0)
+                    if (propertiesRequirement == "validators" ||
+                        propertiesRequirement == "filterUnknownSeries" ||
+                        propertiesRequirement == "filterVRRender" ||
+                        propertiesRequirement == "activities" ||
+                        propertiesRequirement == "arDataReg" ||
+                        propertiesRequirement == "dataReg" ||
+                        propertiesRequirement == "memory" ||
+                        propertiesRequirement == "preferences" ||
+                        propertiesRequirement == "servicesReg" ||
+                        propertiesRequirement == "ioDicomWeb" ||
+                        propertiesRequirement == "ioPacs" ||
+                        propertiesRequirement == "arPatchMedicalData" ||
+                        propertiesRequirement == "patchMedicalData" ||
+                        propertiesRequirement == "console" ||
+                        propertiesRequirement == "guiQt" ||
+                        propertiesRequirement == "scene2D" ||
+                        propertiesRequirement == "visuOgre" ||
+                        propertiesRequirement == "material" ||
+                        propertiesRequirement == "visuVTKQml" ||
+                        propertiesRequirement == "visuVTKQt")
                     {
                         bool find = false;
-                        foreach (Tuple<String, String> requirement in xmlRequirements)
+                        foreach (Tuple<string, string> requirement in xmlRequirements)
                         {
-                            if (propertiesRequirement.CompareTo(requirement.Item1) == 0)
+                            if (propertiesRequirement == requirement.Item1)
                             {
                                 find = true;
                                 break;
@@ -151,20 +151,20 @@ namespace SightProperties
             ///========================================================================================================
             /// Check that bundles used in xml files are in the Properties.cmake (REQUIREMENT)
             ///========================================================================================================
-            foreach (Tuple<String, String> bundle in xmlBundles)
+            foreach (Tuple<string, string> bundle in xmlBundles)
             {
                 /// Check this special bundle, it's not in the requirement list, there are included by others bundles
-                if (bundle.Item1.CompareTo(currentName) != 0 &&
-                    bundle.Item1.CompareTo("fwServices") != 0 &&
-                    bundle.Item1.CompareTo("fwRenderOgre") != 0 &&
-                    bundle.Item1.CompareTo("fwRenderVTK") != 0 &&
-                    bundle.Item1.CompareTo("fwActivities") != 0 &&
-                    bundle.Item1.CompareTo("fwRenderQt") != 0)
+                if (bundle.Item1 != currentName &&
+                    bundle.Item1 != "fwServices" &&
+                    bundle.Item1 != "fwRenderOgre" &&
+                    bundle.Item1 != "fwRenderVTK" &&
+                    bundle.Item1 != "fwActivities" &&
+                    bundle.Item1 != "fwRenderQt")
                 {
                     bool find = false;
-                    foreach (String requirement in propertiesRequirements)
+                    foreach (string requirement in propertiesRequirements)
                     {
-                        if (requirement.CompareTo(bundle.Item1) == 0)
+                        if (requirement == bundle.Item1)
                         {
                             find = true;
                             break;
@@ -180,44 +180,44 @@ namespace SightProperties
             ///========================================================================================================
             /// Check that library used in languages files are in the Properties.cmake (DEPENDENCIES)
             ///========================================================================================================
-            foreach (Tuple<String, String> bundle in languagesBundles)
+            foreach (Tuple<string, string> bundle in languagesBundles)
             {
                 /// Skip external libraries and the current one
-                if (bundle.Item1.CompareTo(currentName) != 0 &&
-                    bundle.Item1.CompareTo("boost") != 0 &&
-                    bundle.Item1.CompareTo("camp") != 0 &&
-                    bundle.Item1.CompareTo("ceres") != 0 &&
-                    bundle.Item1.CompareTo("cppunit") != 0 &&
-                    bundle.Item1.CompareTo("dcmtk") != 0 &&
-                    bundle.Item1.CompareTo("Eigen") != 0 &&
-                    bundle.Item1.CompareTo("glm") != 0 &&
-                    bundle.Item1.CompareTo("librealsense2") != 0 &&
-                    bundle.Item1.CompareTo("libxml") != 0 &&
-                    bundle.Item1.CompareTo("OGRE") != 0 &&
-                    bundle.Item1.CompareTo("GL") != 0 &&
-                    bundle.Item1.CompareTo("OpenGL") != 0 &&
-                    bundle.Item1.CompareTo("opencv2") != 0 &&
-                    bundle.Item1.CompareTo("OpenNI") != 0 &&
-                    bundle.Item1.CompareTo("pcl") != 0 &&
-                    bundle.Item1.CompareTo("vtk") != 0 &&
-                    bundle.Item1.CompareTo("vlc") != 0 &&
-                    bundle.Item1.CompareTo("IPPE") != 0 &&
-                    bundle.Item1.CompareTo("cryptopp") != 0 &&
-                    bundle.Item1.CompareTo("glog") != 0 &&
-                    bundle.Item1.CompareTo("odil") != 0 &&
-                    bundle.Item1.CompareTo("sofa") != 0 &&
-                    bundle.Item1.CompareTo("tetgen") != 0 &&
-                    bundle.Item1.CompareTo("trakSTAR") != 0 &&
-                    bundle.Item1.CompareTo("BulletSoftBody") != 0 &&
-                    bundle.Item1.CompareTo("sys") != 0 &&
-                    bundle.Item1.CompareTo("grpc++") != 0 &&
-                    bundle.Item1.CompareTo("pybind11") != 0 &&
-                    bundle.Item1.CompareTo("itkhdf5") != 0)
+                if (bundle.Item1 != currentName &&
+                    bundle.Item1 != "boost" &&
+                    bundle.Item1 != "camp" &&
+                    bundle.Item1 != "ceres" &&
+                    bundle.Item1 != "cppunit" &&
+                    bundle.Item1 != "dcmtk" &&
+                    bundle.Item1 != "Eigen" &&
+                    bundle.Item1 != "glm" &&
+                    bundle.Item1 != "librealsense2" &&
+                    bundle.Item1 != "libxml" &&
+                    bundle.Item1 != "OGRE" &&
+                    bundle.Item1 != "GL" &&
+                    bundle.Item1 != "OpenGL" &&
+                    bundle.Item1 != "opencv2" &&
+                    bundle.Item1 != "OpenNI" &&
+                    bundle.Item1 != "pcl" &&
+                    bundle.Item1 != "vtk" &&
+                    bundle.Item1 != "vlc" &&
+                    bundle.Item1 != "IPPE" &&
+                    bundle.Item1 != "cryptopp" &&
+                    bundle.Item1 != "glog" &&
+                    bundle.Item1 != "odil" &&
+                    bundle.Item1 != "sofa" &&
+                    bundle.Item1 != "tetgen" &&
+                    bundle.Item1 != "trakSTAR" &&
+                    bundle.Item1 != "BulletSoftBody" &&
+                    bundle.Item1 != "sys" &&
+                    bundle.Item1 != "grpc++" &&
+                    bundle.Item1 != "pybind11" &&
+                    bundle.Item1 != "itkhdf5")
                 {
                     bool find = false;
-                    foreach (String dependenci in propertiesDependencies)
+                    foreach (string dependenci in propertiesDependencies)
                     {
-                        if (dependenci.CompareTo(bundle.Item1) == 0)
+                        if (dependenci == bundle.Item1)
                         {
                             find = true;
                             break;
@@ -233,24 +233,24 @@ namespace SightProperties
             ///========================================================================================================
             /// Check that bundles and libraries in the Properties.cmake are used
             ///========================================================================================================
-            List<Tuple<String, String>> bundlesAndLibraries = xmlBundles;
+            List<Tuple<string, string>> bundlesAndLibraries = xmlBundles;
             bundlesAndLibraries.AddRange(languagesBundles);
 
-            List<String> requirementsAnDependencies = propertiesRequirements;
+            List<string> requirementsAnDependencies = propertiesRequirements;
             requirementsAnDependencies.AddRange(propertiesDependencies);
-            foreach (String requirementOrDependency in requirementsAnDependencies)
+            foreach (string requirementOrDependency in requirementsAnDependencies)
             {
                 /// Skip 'style' bundles, this bundle is used in a weird way and will be checked bellow
                 /// Skip 'uiTF' bundles, this bundle contains files for pre-defined TF
                 if (!(
-                    (requirementOrDependency.CompareTo("style") == 0) ||
-                    (requirementOrDependency.CompareTo("uiTF") == 0)
+                    (requirementOrDependency == "style") ||
+                    (requirementOrDependency == "uiTF")
                     ))
                 {
                     bool find = false;
-                    foreach (Tuple<String, String> bundleOrLibrary in bundlesAndLibraries)
+                    foreach (Tuple<string, string> bundleOrLibrary in bundlesAndLibraries)
                     {
-                        if (requirementOrDependency.CompareTo(bundleOrLibrary.Item1) == 0)
+                        if (requirementOrDependency == bundleOrLibrary.Item1)
                         {
                             find = true;
                             break;
@@ -258,7 +258,7 @@ namespace SightProperties
                     }
                     /// If the bundle is 'appXml' or 'fwlauncher', it can't be used.
                     /// These bundle must be here only in APP type bundles.
-                    if (!((requirementOrDependency.CompareTo("appXml") == 0 || requirementOrDependency.CompareTo("fwlauncher") == 0) && propertiesType.CompareTo("APP") == 0))
+                    if (!((requirementOrDependency == "appXml" || requirementOrDependency == "fwlauncher") && propertiesType == "APP"))
                     {
                         if (!find)
                         {
@@ -274,7 +274,7 @@ namespace SightProperties
             if (requirementsAnDependencies.Contains("style"))
             {
                 /// The 'style' bundle is used in the properties.cmake files
-                String text = File.ReadAllText(propertiesFile);
+                string text = File.ReadAllText(propertiesFile);
                 if (!text.Contains("style-0.1"))
                 {
                     Console.WriteLine("The bundle: `style` is not used");
@@ -288,17 +288,17 @@ namespace SightProperties
             ///========================================================================================================
             /// Check that all services are used
             ///========================================================================================================
-            List<String> xmlFiles = Xml.getXMLFiles(Option.getDirectory());
-            foreach (String file in xmlFiles)
+            List<string> xmlFiles = Xml.getXMLFiles(Option.getDirectory());
+            foreach (string file in xmlFiles)
             {
                 XmlDocument doc = new XmlDocument();
                 doc.Load(file);
 
                 XmlNodeList serviceNodes = doc.DocumentElement.GetElementsByTagName("service");
-                List<String> servicesUid = Xml.getServicesUid(doc);
+                List<string> servicesUid = Xml.getServicesUid(doc);
 
                 /// Check that each service is use in others services
-                foreach (String serviceUid in servicesUid)
+                foreach (string serviceUid in servicesUid)
                 {
                     Boolean find = false;
                     foreach (XmlNode serviceAtt in serviceNodes)
@@ -308,7 +308,7 @@ namespace SightProperties
                         xw.Formatting = Formatting.Indented;
                         serviceAtt.WriteTo(xw);
                         /// The first line contain the uid, we must remove it
-                        String service = sw.ToString();
+                        string service = sw.ToString();
                         service = service.Substring(service.IndexOf(Environment.NewLine) + 1);
                         if (service.Contains(serviceUid))
                         {
@@ -325,7 +325,7 @@ namespace SightProperties
                         {
                             if (startAtt.Attributes["uid"] != null)
                             {
-                                if (startAtt.Attributes["uid"].InnerText.CompareTo(serviceUid) == 0)
+                                if (startAtt.Attributes["uid"].InnerText == serviceUid)
                                 {
                                     find = true;
                                     break;
@@ -344,15 +344,15 @@ namespace SightProperties
             ///========================================================================================================
             /// Check that all objects are used
             ///========================================================================================================
-            foreach (String file in xmlFiles)
+            foreach (string file in xmlFiles)
             {
                 XmlDocument doc = new XmlDocument();
                 doc.Load(file);
 
-                List<String> objectsUid = Xml.getObjectUid(doc);
+                List<string> objectsUid = Xml.getObjectUid(doc);
 
                 /// Check that this object is used in a 'inout'
-                foreach (String objectUid in objectsUid)
+                foreach (string objectUid in objectsUid)
                 {
                     Boolean find = false;
                     XmlNodeList inoutNodes = doc.DocumentElement.GetElementsByTagName("inout");
@@ -360,7 +360,7 @@ namespace SightProperties
                     {
                         if (inoutAtt.Attributes["uid"] != null)
                         {
-                            if (inoutAtt.Attributes["uid"].InnerText.CompareTo(objectUid) == 0)
+                            if (inoutAtt.Attributes["uid"].InnerText == objectUid)
                             {
                                 find = true;
                                 break;
@@ -376,7 +376,7 @@ namespace SightProperties
                         {
                             if (inAtt.Attributes["uid"] != null)
                             {
-                                if (inAtt.Attributes["uid"].InnerText.CompareTo(objectUid) == 0)
+                                if (inAtt.Attributes["uid"].InnerText == objectUid)
                                 {
                                     find = true;
                                     break;
@@ -393,7 +393,7 @@ namespace SightProperties
                         {
                             if (outAtt.Attributes["uid"] != null)
                             {
-                                if (outAtt.Attributes["uid"].InnerText.CompareTo(objectUid) == 0)
+                                if (outAtt.Attributes["uid"].InnerText == objectUid)
                                 {
                                     find = true;
                                     break;
@@ -410,7 +410,7 @@ namespace SightProperties
                         {
                             if (outAtt.Attributes["uid"] != null)
                             {
-                                if (outAtt.Attributes["uid"].InnerText.CompareTo(objectUid) == 0)
+                                if (outAtt.Attributes["uid"].InnerText == objectUid)
                                 {
                                     find = true;
                                     break;
@@ -429,22 +429,22 @@ namespace SightProperties
             ///========================================================================================================
             /// Check that all channel are used
             ///========================================================================================================
-            foreach (String file in xmlFiles)
+            foreach (string file in xmlFiles)
             {
                 XmlDocument doc = new XmlDocument();
                 doc.Load(file);
 
                 XmlNodeList connectNodes = doc.DocumentElement.GetElementsByTagName("connect");
 
-                String text = File.ReadAllText(file);
+                string text = File.ReadAllText(file);
 
                 /// Retreive all channel uid
-                List<String> channelsUid = new List<String>();
+                List<string> channelsUid = new List<string>();
                 foreach (XmlNode connectAtt in connectNodes)
                 {
                     if (connectAtt.Attributes["channel"] != null)
                     {
-                        String channel = connectAtt.Attributes["channel"].InnerText;
+                        string channel = connectAtt.Attributes["channel"].InnerText;
                         /// Remove the reference, the channel can be used as parameter
                         channel = channel.Replace("${", "");
                         channel = channel.Replace("}", "");

@@ -12,18 +12,18 @@ namespace SightProperties
         /// Get bundles related to cpp/hpp/c/h files
         /// </summary>
         /// <returns>The list of require bundles</returns>
-        public static List<Tuple<String, String>> getIncludeBundles(String _rep)
+        public static List<Tuple<string, string>> getIncludeBundles(string _rep)
         {
-            List<String> languageFiles = getLanguageFiles(_rep);
+            List<string> languageFiles = getLanguageFiles(_rep);
 
-            List<Tuple<String, String>> bundles = new List<Tuple<String, String>>();
-            foreach (String file in languageFiles)
+            List<Tuple<string, string>> bundles = new List<Tuple<string, string>>();
+            foreach (string file in languageFiles)
             {
-                List<String> requirements = getIncludes(file);
+                List<string> requirements = getIncludes(file);
 
-                foreach (String s in requirements)
+                foreach (string s in requirements)
                 {
-                    bundles.Add(new Tuple<String, String>(s, file));
+                    bundles.Add(new Tuple<string, string>(s, file));
                 }
             }
 
@@ -31,7 +31,7 @@ namespace SightProperties
         }
 
         /*
-        * Commun utils fnctions
+        * Commun utils functions
         */
 
         /// <summary>
@@ -39,10 +39,10 @@ namespace SightProperties
         /// </summary>
         /// <param name="_rep">The directory</param>
         /// <returns>The list af all file names</returns>
-        public static List<String> getLanguageFiles(String _rep)
+        public static List<string> getLanguageFiles(string _rep)
         {
-            List<String> languageFiles = new List<string>();
-            foreach (String dir in Directory.GetDirectories(_rep))
+            List<string> languageFiles = new List<string>();
+            foreach (string dir in Directory.GetDirectories(_rep))
             {
                 languageFiles.AddRange(getLanguageFiles(dir));
             }
@@ -58,16 +58,16 @@ namespace SightProperties
         /// </summary>
         /// <param name="_file">The language file</param>
         /// <returns>The list of all bundles</returns>
-        private static List<String> getIncludes(String _file)
+        private static List<string> getIncludes(string _file)
         {
-            List<String> bundles = new List<String>();
+            List<string> bundles = new List<string>();
 
-            String text = File.ReadAllText(_file);
+            string text = File.ReadAllText(_file);
             Regex regex = new Regex(@"#include +<[^/\.>]*/", RegexOptions.Compiled);
             Regex regexBundle = new Regex(@"<.*", RegexOptions.Compiled);
             foreach (Match include in regex.Matches(text))
             {
-                String bundle = regexBundle.Match(include.ToString()).ToString().Replace("<", string.Empty).Replace("/", string.Empty);
+                string bundle = regexBundle.Match(include.ToString()).ToString().Replace("<", string.Empty).Replace("/", string.Empty);
                 bundles.Add(bundle);
             }
 
