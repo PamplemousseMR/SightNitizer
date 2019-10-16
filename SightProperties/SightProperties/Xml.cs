@@ -498,6 +498,16 @@ namespace SightProperties
                 {
                     bundles.Add(new Tuple<String, String>("opITK", file));
                 }
+                if (checkId(text, "EUSGPS_AppCfg") ||
+                    checkId(text, "modelToUSRegistration_AppCfg") ||
+                    checkId(text, "transferFunctionManagerWindow_AppCfg"))
+                {
+                    bundles.Add(new Tuple<String, String>("EUSGPSActivity", file));
+                }
+                if (checkId(text, "EUSProbeCalibration"))
+                {
+                    bundles.Add(new Tuple<String, String>("EUSProbeCalibrationActivity", file));
+                }
             }
 
             return bundles;
@@ -769,6 +779,14 @@ namespace SightProperties
                 {
                     bundles.Add(new Tuple<String, String>("volumicActivity", file));
                 }
+                if (checkId(text, "EUSGPS_Activity"))
+                {
+                    bundles.Add(new Tuple<String, String>("EUSGPSActivity", file));
+                }
+                if (checkId(text, "EUSProbeCalibrationActivity"))
+                {
+                    bundles.Add(new Tuple<String, String>("EUSProbeCalibrationActivity", file));
+                }
             }
 
             return bundles;
@@ -883,7 +901,7 @@ namespace SightProperties
         }
 
         /// <summary>
-        /// Check if a serviceDonfig, appConfig or activity is used
+        /// Check if a serviceConfig, appConfig or activity is used
         /// </summary>
         /// <param name="_text">The file as text</param>
         /// <param name="_keyword">The keyword to find</param>
@@ -891,7 +909,8 @@ namespace SightProperties
         private static bool checkId(String _text, String _keyword)
         {
             return (_text.Contains("id=\"" + _keyword + "\"") || 
-                _text.Contains("<id>" + _keyword + "</id>") || 
+                _text.Contains("<id>" + _keyword + "</id>") ||
+                _text.Contains("config=\"" + _keyword + "\"") ||
                 _text.Contains("<ioSelectorConfig>" + _keyword + "</ioSelectorConfig>") ||
                 _text.Contains("<sdbIoSelectorConfig>" + _keyword + "</sdbIoSelectorConfig>"));
         }
