@@ -50,7 +50,7 @@ namespace SightProperties
         public static List<string> getBundleDirectories(string _dir)
         {
             List<string> bundleDirectories = new List<string>();
-            if(Directory.GetFiles(_dir, "Properties.cmake").Length < 1)
+            if (Directory.GetFiles(_dir, "Properties.cmake").Length < 1)
             {
                 foreach (string dir in Directory.GetDirectories(_dir))
                 {

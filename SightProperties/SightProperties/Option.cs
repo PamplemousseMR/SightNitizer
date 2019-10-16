@@ -15,11 +15,11 @@ namespace SightProperties
         public static bool parse(string[] _args)
         {
             bool isValid = true;
-            if(_args.Length <= 0)
+            if (_args.Length <= 0)
             {
                 isValid = false;
             }
-            else if(_args.Length > 1)
+            else if (_args.Length > 1)
             {
                 isValid = false;
             }

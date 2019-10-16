@@ -304,8 +304,10 @@ namespace SightProperties
                     foreach (XmlNode serviceAtt in serviceNodes)
                     {
                         StringWriter sw = new StringWriter();
-                        XmlTextWriter xw = new XmlTextWriter(sw);
-                        xw.Formatting = Formatting.Indented;
+                        XmlTextWriter xw = new XmlTextWriter(sw)
+                        {
+                            Formatting = Formatting.Indented
+                        };
                         serviceAtt.WriteTo(xw);
                         /// The first line contain the uid, we must remove it
                         string service = sw.ToString();

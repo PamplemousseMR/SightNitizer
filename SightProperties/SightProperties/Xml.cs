@@ -207,7 +207,7 @@ namespace SightProperties
                 if (text.Contains("icon=\"media") || text.Contains("<icon>media"))
                 {
                     bundles.Add(new Tuple<string, string>("media", file));
-                } 
+                }
                 if (text.Contains("icon=\"arMedia") || text.Contains("<icon>arMedia"))
                 {
                     bundles.Add(new Tuple<string, string>("arMedia", file));
@@ -241,7 +241,7 @@ namespace SightProperties
             foreach (string file in xmlFiles)
             {
                 string text = File.ReadAllText(file);
-                foreach(Tuple<string, List<string>> extensionBundle in _extensionBundles)
+                foreach (Tuple<string, List<string>> extensionBundle in _extensionBundles)
                 {
                     foreach (string extension in extensionBundle.Item2)
                     {
@@ -410,7 +410,7 @@ namespace SightProperties
         /// <returns>True if the keyword is founded</returns>
         private static bool checkId(string _text, string _keyword)
         {
-            return (_text.Contains("id=\"" + _keyword + "\"") || 
+            return (_text.Contains("id=\"" + _keyword + "\"") ||
                 _text.Contains("<id>" + _keyword + "</id>") ||
                 _text.Contains("config=\"" + _keyword + "\"") ||
                 _text.Contains("<ioSelectorConfig>" + _keyword + "</ioSelectorConfig>") ||
