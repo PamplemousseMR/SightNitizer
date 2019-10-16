@@ -890,7 +890,10 @@ namespace SightProperties
         /// <returns>True if the keyword is founded</returns>
         private static bool checkId(String _text, String _keyword)
         {
-            return (_text.Contains("id=\"" + _keyword + "\"") || _text.Contains("<id>" + _keyword + "</id>"));
+            return (_text.Contains("id=\"" + _keyword + "\"") || 
+                _text.Contains("<id>" + _keyword + "</id>") || 
+                _text.Contains("<ioSelectorConfig>" + _keyword + "</ioSelectorConfig>") ||
+                _text.Contains("<sdbIoSelectorConfig>" + _keyword + "</sdbIoSelectorConfig>"));
         }
     }
 }

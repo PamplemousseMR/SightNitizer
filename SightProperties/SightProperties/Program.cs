@@ -225,7 +225,6 @@ namespace SightProperties
                 /// Skip 'style' bundles, this bundle is used in a weird way and will be checked bellow
                 /// Skip 'uiTF' bundles, this bundle contains files for pre-defined TF
                 if (!(
-                    requirementOrDependency.StartsWith("io") || 
                     (requirementOrDependency.CompareTo("style") == 0) ||
                     (requirementOrDependency.CompareTo("uiTF") == 0)
                     ))
