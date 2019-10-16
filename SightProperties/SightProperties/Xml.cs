@@ -818,6 +818,14 @@ namespace SightProperties
                     services.Add(configAtt.Attributes["service"].InnerText);
                 }
             }
+            XmlNodeList selectionNodes = _doc.DocumentElement.GetElementsByTagName("addSelection");
+            foreach (XmlNode selectionAtt in selectionNodes)
+            {
+                if (selectionAtt.Attributes["service"] != null)
+                {
+                    services.Add(selectionAtt.Attributes["service"].InnerText);
+                }
+            }
             return services;
         }
 
