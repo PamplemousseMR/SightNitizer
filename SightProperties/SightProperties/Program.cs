@@ -191,7 +191,9 @@ namespace SightProperties
                     bundle.Item1.CompareTo("trakSTAR") != 0 &&
                     bundle.Item1.CompareTo("BulletSoftBody") != 0 &&
                     bundle.Item1.CompareTo("sys") != 0 &&
-                    bundle.Item1.CompareTo("grpc++") != 0)
+                    bundle.Item1.CompareTo("grpc++") != 0 &&
+                    bundle.Item1.CompareTo("pybind11") != 0 &&
+                    bundle.Item1.CompareTo("itkhdf5") != 0)
                 {
                     bool find = false;
                     foreach (String dependenci in propertiesDependencies)
@@ -389,6 +391,23 @@ namespace SightProperties
                     if (!find)
                     {
                         XmlNodeList outNodes = doc.DocumentElement.GetElementsByTagName("out");
+                        foreach (XmlNode outAtt in outNodes)
+                        {
+                            if (outAtt.Attributes["uid"] != null)
+                            {
+                                if (outAtt.Attributes["uid"].InnerText.CompareTo(objectUid) == 0)
+                                {
+                                    find = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    /// Check that this object is used in a 'key'
+                    if (!find)
+                    {
+                        XmlNodeList outNodes = doc.DocumentElement.GetElementsByTagName("key");
                         foreach (XmlNode outAtt in outNodes)
                         {
                             if (outAtt.Attributes["uid"] != null)
