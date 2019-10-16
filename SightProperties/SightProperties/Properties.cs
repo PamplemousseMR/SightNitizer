@@ -117,5 +117,31 @@ namespace SightProperties
             }
             return type;
         }
+
+        /// <summary>
+        /// Get the name of a properties file
+        /// </summary>
+        /// <param name="_file">The properties file</param>
+        /// <returns>The name of the directory</returns>
+        public static String getName(String _file)
+        {
+            String[] lines = System.IO.File.ReadAllLines(_file);
+            String type = "Unknow";
+
+            foreach (String line in lines)
+            {
+                int comment = line.IndexOf("#");
+                comment = comment < 0 ? line.Length : comment;
+                String noComment = line.Substring(0, comment);
+
+                if (noComment.Contains("NAME"))
+                {
+                    String cleanLine = Regex.Replace(noComment, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+                    type = cleanLine.Replace("setNAME", "");
+                }
+
+            }
+            return type;
+        }
     }
 }

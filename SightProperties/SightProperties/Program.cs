@@ -16,6 +16,24 @@ namespace SightProperties
                 Environment.Exit(1);
             }
 
+            /// Get sight directories informations
+            String rootDirectory = Sight.getRootDirectory(Option.getDirectory());
+            List<String> sightDirectories = Sight.getSightDirectory(rootDirectory);
+
+            /// Retreive bundles with activities, app config and service config names
+            List<Tuple<String, List<String>>> activityBundles = new List<Tuple<String, List<String>>>();
+            List<Tuple<String, List<String>>> appConfigBundles = new List<Tuple<String, List<String>>>();
+            List<Tuple<String, List<String>>> serviceConfigBundles = new List<Tuple<String, List<String>>>();
+            foreach (String directory in sightDirectories)
+            {
+                foreach (String dir in Sight.getBundleDirectories(directory))
+                {
+                    activityBundles.Add(Sight.getActivitiesBundles(dir));
+                    appConfigBundles.Add(Sight.getAppConfigBundles(dir));
+                    serviceConfigBundles.Add(Sight.getServiceConfigBundles(dir));
+                }
+            }
+
             /// Get current libray/bundle name
             String[] path = Option.getDirectory().Split('\\');
             String currentName = path[path.Length - 1];
@@ -29,9 +47,9 @@ namespace SightProperties
             xmlBundles.AddRange(Xml.getVTKBundles(Option.getDirectory()));
             xmlBundles.AddRange(Xml.getStandardBundles(Option.getDirectory()));
             xmlBundles.AddRange(Xml.getMediaBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Xml.getAppConfigBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Xml.getServiceConfigBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Xml.getActivitiesBundles(Option.getDirectory()));
+            xmlBundles.AddRange(Xml.getExtensionBundles(Option.getDirectory(), activityBundles));
+            xmlBundles.AddRange(Xml.getExtensionBundles(Option.getDirectory(), appConfigBundles));
+            xmlBundles.AddRange(Xml.getExtensionBundles(Option.getDirectory(), serviceConfigBundles));
 
             /// Get require bundles in xml files
             List<Tuple<String, String>> xmlRequirements = Xml.getRequireBundles(Option.getDirectory());
