@@ -135,6 +135,10 @@ namespace SightProperties
                     bundles.Add(new Tuple<String, String>("visuOgre", file));
                     bundles.Add(new Tuple<String, String>("material", file));
                 }
+                if (text.Contains("::visuOgreExAdaptor::SIDVRRender"))
+                {
+                    bundles.Add(new Tuple<String, String>("materialEx", file));
+                }
             }
 
             return bundles;
