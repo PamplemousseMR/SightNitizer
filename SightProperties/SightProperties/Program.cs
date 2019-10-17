@@ -127,6 +127,7 @@ namespace SightProperties
                         propertiesRequirement == "scene2D" ||
                         propertiesRequirement == "visuOgre" ||
                         propertiesRequirement == "material" ||
+                        propertiesRequirement == "materialEx" ||
                         propertiesRequirement == "visuVTKQml" ||
                         propertiesRequirement == "visuVTKQt")
                     {
@@ -275,7 +276,7 @@ namespace SightProperties
             {
                 /// The 'style' bundle is used in the properties.cmake files
                 string text = File.ReadAllText(propertiesFile);
-                if (!text.Contains("style-0.1"))
+                if (!text.Contains("style-0.1/"))
                 {
                     Console.WriteLine("The bundle: `style` is not used");
                 }
