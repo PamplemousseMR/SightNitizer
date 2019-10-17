@@ -32,9 +32,15 @@ namespace SightProperties
 
             s_DIRECTORY = _args[0];
 
-            if (!Directory.Exists(Option.getDirectory()))
+            if (!Directory.Exists(s_DIRECTORY))
             {
                 Console.WriteLine("Directory `" + s_DIRECTORY + "` does not exist");
+                return false;
+            }
+
+            if (!File.Exists(s_DIRECTORY + "\\Properties.cmake"))
+            {
+                Console.WriteLine("Directory `" + s_DIRECTORY + "` does not contain a 'Properties.cmake' file");
                 return false;
             }
 
