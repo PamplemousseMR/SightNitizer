@@ -60,8 +60,8 @@ namespace SightProperties
             else
             {
                 string propertiesFile = _dir + "\\Properties.cmake";
-                string propertiesType = Properties.getType(propertiesFile);
-                if (propertiesType == "BUNDLE")
+                Properties.TYPE propertiesType = Properties.getType(propertiesFile);
+                if (propertiesType == Properties.TYPE.BUNDLE)
                 {
                     bundleDirectories.Add(_dir);
                 }

@@ -61,7 +61,7 @@ namespace SightProperties
             string propertiesFile = Option.getDirectory() + "\\Properties.cmake";
 
             /// Get the type of the directory (APP/EXECUTABLE/BUNDLE/LIBRARY/TEST)
-            string propertiesType = Properties.getType(propertiesFile);
+            Properties.TYPE propertiesType = Properties.getType(propertiesFile);
 
             /// Get the requirement list
             List<string> propertiesRequirements = Properties.getRequirements(propertiesFile);
@@ -72,7 +72,7 @@ namespace SightProperties
             ///========================================================================================================
             /// In case of APP type bundles
             ///========================================================================================================
-            if (propertiesType == "APP")
+            if (propertiesType == Properties.TYPE.APP)
             {
                 ///========================================================================================================
                 /// Check that appxml and fwlauncher are in the Properties.cmake
@@ -157,9 +157,9 @@ namespace SightProperties
                 /// Check this special bundle, it's not in the requirement list, there are included by others bundles
                 if (bundle.Item1 != currentName &&
                     bundle.Item1 != "fwServices" &&
+                    bundle.Item1 != "fwActivities" &&
                     bundle.Item1 != "fwRenderOgre" &&
                     bundle.Item1 != "fwRenderVTK" &&
-                    bundle.Item1 != "fwActivities" &&
                     bundle.Item1 != "fwRenderQt")
                 {
                     bool find = false;
@@ -241,7 +241,7 @@ namespace SightProperties
             requirementsAnDependencies.AddRange(propertiesDependencies);
             foreach (string requirementOrDependency in requirementsAnDependencies)
             {
-                /// Skip 'style' bundles, this bundle is used in a weird way and will be checked bellow
+                /// Skip 'style' bundles, this bundle is used in a weird way and will be checked below
                 /// Skip 'uiTF' bundles, this bundle contains files for pre-defined TF
                 if (!(
                     (requirementOrDependency == "style") ||
@@ -258,8 +258,8 @@ namespace SightProperties
                         }
                     }
                     /// If the bundle is 'appXml' or 'fwlauncher', it can't be used.
-                    /// These bundle must be here only in APP type bundles.
-                    if (!((requirementOrDependency == "appXml" || requirementOrDependency == "fwlauncher") && propertiesType == "APP"))
+                    /// These bundle must be here only in APP type bundles (checked above).
+                    if (!((requirementOrDependency == "appXml" || requirementOrDependency == "fwlauncher") && propertiesType == Properties.TYPE.APP))
                     {
                         if (!find)
                         {
@@ -283,7 +283,7 @@ namespace SightProperties
             }
 
             ///========================================================================================================
-            /// TODO, check IO bundles, video bundles, ioTF
+            /// TODO, check IO bundles, video bundles, uiTF
             ///========================================================================================================
 
             ///========================================================================================================

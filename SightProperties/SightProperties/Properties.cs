@@ -91,12 +91,19 @@ namespace SightProperties
             return cleanLines;
         }
 
+        public enum TYPE
+        {
+            UNKNOW,
+            APP,
+            BUNDLE
+        }
+
         /// <summary>
         /// Get the type of a properties file
         /// </summary>
         /// <param name="_file">The properties file</param>
         /// <returns>The type of the directory</returns>
-        public static string getType(string _file)
+        public static TYPE getType(string _file)
         {
             string[] lines = System.IO.File.ReadAllLines(_file);
             string type = "Unknow";
@@ -114,7 +121,11 @@ namespace SightProperties
                 }
 
             }
-            return type;
+            if (type == "APP")
+                return TYPE.APP;
+            if (type == "BUNDLE")
+                return TYPE.BUNDLE;
+            return TYPE.UNKNOW;
         }
 
         /// <summary>
