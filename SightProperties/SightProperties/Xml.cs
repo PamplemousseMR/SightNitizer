@@ -220,9 +220,9 @@ namespace SightProperties
                 {
                     bundles.Add(new Tuple<string, string>("perfusionMedia", file));
                 }
-                if (text.Contains("icon=\"resources") || text.Contains("<icon>resources"))
+                if (text.Contains("icon=\"EUSResources") || text.Contains("<icon>EUSResources"))
                 {
-                    bundles.Add(new Tuple<string, string>("resources", file));
+                    bundles.Add(new Tuple<string, string>("EUSResources", file));
                 }
             }
 
