@@ -96,11 +96,11 @@ namespace SightProperties
                 }
                 if (!findAppXml)
                 {
-                    Console.WriteLine("The bundle: `appXml` was not found in the file: `" + propertiesFile + "`");
+                    Console.WriteLine("The bundle: `appXml` was not found in the `Properties.cmake`");
                 }
                 if (!findFwlauncher)
                 {
-                    Console.WriteLine("The bundle: `fwlauncher` was not found in the file: `" + propertiesFile + "`");
+                    Console.WriteLine("The bundle: `fwlauncher` was not found in the `Properties.cmake`");
                 }
 
                 ///========================================================================================================
@@ -143,7 +143,7 @@ namespace SightProperties
 
                         if (!find)
                         {
-                            Console.WriteLine("The bundle: `" + propertiesRequirement + "` need to be in the xml's requirements list");
+                            Console.WriteLine("The bundle: `" + propertiesRequirement + "` needs to be in the xml's requirements list");
                         }
                     }
                 }
@@ -173,7 +173,7 @@ namespace SightProperties
                     }
                     if (!find)
                     {
-                        Console.WriteLine("The bundle: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the file: `" + propertiesFile + "`");
+                        Console.WriteLine("The bundle: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the `Properties.cmake`");
                     }
                 }
             }
@@ -226,7 +226,7 @@ namespace SightProperties
                     }
                     if (!find)
                     {
-                        Console.WriteLine("The library: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the file: `" + propertiesFile + "`");
+                        Console.WriteLine("The library: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the `Properties.cmake`");
                     }
                 }
             }
@@ -245,7 +245,8 @@ namespace SightProperties
                 /// Skip 'uiTF' bundles, this bundle contains files for pre-defined TF
                 if (!(
                     (requirementOrDependency == "style") ||
-                    (requirementOrDependency == "uiTF")
+                    (requirementOrDependency == "uiTF") ||
+                    (requirementOrDependency.StartsWith("io"))
                     ))
                 {
                     bool find = false;
