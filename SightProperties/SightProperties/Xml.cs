@@ -414,6 +414,7 @@ namespace SightProperties
                 _text.Contains("<id>" + _keyword + "</id>") ||
                 _text.Contains("config=\"" + _keyword + "\"") ||
                 _text.Contains("<ioSelectorConfig>" + _keyword + "</ioSelectorConfig>") ||
+                _text.Contains("<activity>" + _keyword + "</activity>") ||
                 _text.Contains("<sdbIoSelectorConfig>" + _keyword + "</sdbIoSelectorConfig>"));
         }
     }
