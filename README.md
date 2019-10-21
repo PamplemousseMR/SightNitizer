@@ -15,7 +15,7 @@ Open `SightProperties.sln` and compile by using visual studio.
 Start the sofware : `SightProperties.exe <path>`.
 
 ```
-- path : path to the bundle to check.
+- path : path to the bundle/library/app to check.
 ```
 
 ## Authors
