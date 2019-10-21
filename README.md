@@ -1,6 +1,14 @@
 # SightProperties
 
-This project allow to get bundles dependencies in Sight, and check their presences in the `properties.cmake` file. It also check that requires bundles in the `properties.cmake` are all used in xml or hpp/cpp files.
+This project allow to check bundles and libraries in Sight.
+* Check that appxml and fwlauncher are in the Properties.cmake.
+* Check that bundle in xml file are properly started (requirement in xml files).
+* Check that bundles used in xml files are in the Properties.cmake (REQUIREMENT).
+* Check that library used in languages files are in the Properties.cmake (DEPENDENCIES).
+* Check that bundles and libraries in the Properties.cmake are used.
+* Check that all services are used.
+* Check that all objects are used.
+* Check that all channel are used.
 
 ## Getting Started
 
@@ -12,7 +20,7 @@ Open `SightProperties.sln` and compile by using visual studio.
 
 ### Use
 
-Start the sofware : `SightProperties.exe <path>`.
+Start the utility : `SightProperties.exe <path>`.
 
 ```
 - path : path to the bundle/library/app to check.
