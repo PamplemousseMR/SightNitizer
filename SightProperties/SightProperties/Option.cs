@@ -38,13 +38,12 @@ namespace SightProperties
                 return false;
             }
 
-            if (!File.Exists(s_DIRECTORY + "\\Properties.cmake"))
-            {
-                Console.WriteLine("Directory `" + s_DIRECTORY + "` does not contain a 'Properties.cmake' file");
-                return false;
-            }
-
             return true;
+        }
+
+        public static bool isPropertiesDirectory()
+        {
+            return File.Exists(s_DIRECTORY + "\\Properties.cmake");
         }
 
         public static string getDirectory()

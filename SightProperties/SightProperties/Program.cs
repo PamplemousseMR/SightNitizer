@@ -1,3 +1,4 @@
+using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,8 +17,78 @@ namespace SightProperties
                 Environment.Exit(1);
             }
 
+            // If the directory contain a properties.cmake
+            if (Option.isPropertiesDirectory())
+            {
+                processDirectory(Option.getDirectory());
+            }
+            // Else, it must be a git repository
+            else if (Repository.IsValid(Option.getDirectory()))
+            {
+                using (var repo = new Repository(Option.getDirectory()))
+                {
+                    IEnumerable<StatusEntry> files = repo.RetrieveStatus().Modified;
+                    List<string> directories = new List<string>();
+                    // For each modified files
+                    foreach (StatusEntry statusEntry in files)
+                    {
+                        // Get the full path
+                        string directory = statusEntry.FilePath.Replace('/', '\\'); ;
+                        while (directory != "")
+                        {
+                            if (File.Exists(Option.getDirectory() + "\\" + directory + "\\Properties.cmake"))
+                            {
+                                // Add it if it's not already added.
+                                bool found = false;
+                                foreach (string addedDirectory in directories)
+                                {
+                                    if(addedDirectory == Option.getDirectory() + "\\" + directory)
+                                    {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found)
+                                {
+                                    directories.Add(Option.getDirectory() + "\\" + directory);
+                                }
+                                break;
+                            }
+                            int lastIndex = directory.LastIndexOf("\\");
+                            if (lastIndex != -1)
+                            {
+                                directory = directory.Substring(0, lastIndex);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (directories.Count == 0)
+                    {
+                        Console.WriteLine("No modified files where found");
+                    }
+                    else
+                    {
+                        foreach (string directory in directories)
+                        {
+                            processDirectory(directory);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("The path must be a git repository or a sight directory that contain a Properties.cmake file");
+            }
+        }
+
+        static private void processDirectory(string _directory)
+        {
             /// Get sight directories informations
-            string rootDirectory = Sight.getRootDirectory(Option.getDirectory());
+            string rootDirectory = Sight.getRootDirectory(_directory);
             List<string> sightDirectories = Sight.getSightDirectory(rootDirectory);
 
             /// Retreive bundles with activities, app config and service config names
@@ -35,30 +106,30 @@ namespace SightProperties
             }
 
             /// Get current libray/bundle name
-            string[] path = Option.getDirectory().Split('\\');
+            string[] path = _directory.Split('\\');
             string currentName = path[path.Length - 1];
 
             /// Get bundles list of xml files
-            List<Tuple<string, string>> xmlBundles = Xml.getDefaultBundles(Option.getDirectory());
-            xmlBundles.AddRange(Xml.getRequireBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Xml.getObjectsBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Xml.getOgreBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Xml.getQtBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Xml.getVTKBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Xml.getStandardBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Xml.getMediaBundles(Option.getDirectory()));
-            xmlBundles.AddRange(Xml.getExtensionBundles(Option.getDirectory(), activityBundles));
-            xmlBundles.AddRange(Xml.getExtensionBundles(Option.getDirectory(), appConfigBundles));
-            xmlBundles.AddRange(Xml.getExtensionBundles(Option.getDirectory(), serviceConfigBundles));
+            List<Tuple<string, string>> xmlBundles = Xml.getDefaultBundles(_directory);
+            xmlBundles.AddRange(Xml.getRequireBundles(_directory));
+            xmlBundles.AddRange(Xml.getObjectsBundles(_directory));
+            xmlBundles.AddRange(Xml.getOgreBundles(_directory));
+            xmlBundles.AddRange(Xml.getQtBundles(_directory));
+            xmlBundles.AddRange(Xml.getVTKBundles(_directory));
+            xmlBundles.AddRange(Xml.getStandardBundles(_directory));
+            xmlBundles.AddRange(Xml.getMediaBundles(_directory));
+            xmlBundles.AddRange(Xml.getExtensionBundles(_directory, activityBundles));
+            xmlBundles.AddRange(Xml.getExtensionBundles(_directory, appConfigBundles));
+            xmlBundles.AddRange(Xml.getExtensionBundles(_directory, serviceConfigBundles));
 
             /// Get require bundles in xml files
-            List<Tuple<string, string>> xmlRequirements = Xml.getRequireBundles(Option.getDirectory());
+            List<Tuple<string, string>> xmlRequirements = Xml.getRequireBundles(_directory);
 
             /// Get bundles list of languages files
-            List<Tuple<string, string>> languagesBundles = Language.getIncludeBundles(Option.getDirectory());
+            List<Tuple<string, string>> languagesBundles = Language.getIncludeBundles(_directory);
 
             /// Get Properties.cmake
-            string propertiesFile = Option.getDirectory() + "\\Properties.cmake";
+            string propertiesFile = _directory + "\\Properties.cmake";
 
             /// Get the type of the directory (APP/EXECUTABLE/BUNDLE/LIBRARY/TEST)
             Properties.TYPE propertiesType = Properties.getType(propertiesFile);
@@ -96,11 +167,11 @@ namespace SightProperties
                 }
                 if (!findAppXml)
                 {
-                    Console.WriteLine("The bundle: `appXml` was not found in the `Properties.cmake`");
+                    Console.WriteLine("The bundle: `appXml` was not found in the `Properties.cmake` in " + _directory);
                 }
                 if (!findFwlauncher)
                 {
-                    Console.WriteLine("The bundle: `fwlauncher` was not found in the `Properties.cmake`");
+                    Console.WriteLine("The bundle: `fwlauncher` was not found in the `Properties.cmake` in " + _directory);
                 }
 
                 ///========================================================================================================
@@ -143,7 +214,7 @@ namespace SightProperties
 
                         if (!find)
                         {
-                            Console.WriteLine("The bundle: `" + propertiesRequirement + "` needs to be in the xml's requirements list");
+                            Console.WriteLine("The bundle: `" + propertiesRequirement + "` needs to be in the xml's requirements list in " + _directory);
                         }
                     }
                 }
@@ -263,7 +334,7 @@ namespace SightProperties
                     {
                         if (!find)
                         {
-                            Console.WriteLine("The library/bundle: `" + requirementOrDependency + "` is not used");
+                            Console.WriteLine("The library/bundle: `" + requirementOrDependency + "` is not used in " + _directory);
                         }
                     }
                 }
@@ -278,18 +349,18 @@ namespace SightProperties
                 string text = File.ReadAllText(propertiesFile);
                 if (!text.Contains("style-0.1/"))
                 {
-                    Console.WriteLine("The bundle: `style` is not used");
+                    Console.WriteLine("The bundle: `style` is not used in " + _directory);
                 }
             }
 
             ///========================================================================================================
-            /// TODO, check IO bundles, video bundles, uiTF
+            /// TODO, check IO bundles, video bundles
             ///========================================================================================================
 
             ///========================================================================================================
             /// Check that all services are used
             ///========================================================================================================
-            List<string> xmlFiles = Xml.getXMLFiles(Option.getDirectory());
+            List<string> xmlFiles = Xml.getXMLFiles(_directory);
             foreach (string file in xmlFiles)
             {
                 XmlDocument doc = new XmlDocument();
