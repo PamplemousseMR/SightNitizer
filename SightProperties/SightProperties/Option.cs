@@ -26,7 +26,7 @@ namespace SightProperties
 
             if (!isValid)
             {
-                Console.WriteLine("The directory name is needed");
+                Logs.getInstance().error("The directory name is needed");
                 return false;
             }
 
@@ -34,7 +34,7 @@ namespace SightProperties
 
             if (!Directory.Exists(s_DIRECTORY))
             {
-                Console.WriteLine("Directory `" + s_DIRECTORY + "` does not exist");
+                Logs.getInstance().error("Directory `" + s_DIRECTORY + "` does not exist");
                 return false;
             }
 

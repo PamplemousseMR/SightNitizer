@@ -7,84 +7,102 @@ using System.Xml;
 
 namespace SightProperties
 {
+
     class Program
     {
         static void Main(string[] _args)
         {
             /// Parse args
-            if (!Option.parse(_args))
+            if (Option.parse(_args))
             {
-                Environment.Exit(1);
-            }
-
-            // If the directory contain a properties.cmake
-            if (Option.isPropertiesDirectory())
-            {
-                processDirectory(Option.getDirectory());
-            }
-            // Else, it must be a git repository
-            else if (Repository.IsValid(Option.getDirectory()))
-            {
-                using (var repo = new Repository(Option.getDirectory()))
+                // If the directory contain a properties.cmake
+                if (Option.isPropertiesDirectory())
                 {
-                    IEnumerable<StatusEntry> files = repo.RetrieveStatus().Modified;
-                    List<string> directories = new List<string>();
-                    // For each modified files
-                    foreach (StatusEntry statusEntry in files)
+                    processDirectory(Option.getDirectory());
+                }
+                // Else, it must be a git repository
+                else if (Repository.IsValid(Option.getDirectory()))
+                {
+                    using (var repo = new Repository(Option.getDirectory()))
                     {
-                        // Get the full path
-                        string directory = statusEntry.FilePath.Replace('/', '\\'); ;
-                        while (directory != "")
+                        IEnumerable<StatusEntry> files = repo.RetrieveStatus().Modified;
+                        List<string> directories = new List<string>();
+                        // For each modified files
+                        foreach (StatusEntry statusEntry in files)
                         {
-                            if (File.Exists(Option.getDirectory() + "\\" + directory + "\\Properties.cmake"))
+                            // Get the full path
+                            string directory = statusEntry.FilePath.Replace('/', '\\'); ;
+                            while (directory != "")
                             {
-                                // Add it if it's not already added.
-                                bool found = false;
-                                foreach (string addedDirectory in directories)
+                                if (File.Exists(Option.getDirectory() + "\\" + directory + "\\Properties.cmake"))
                                 {
-                                    if(addedDirectory == Option.getDirectory() + "\\" + directory)
+                                    // Add it if it's not already added.
+                                    bool found = false;
+                                    foreach (string addedDirectory in directories)
                                     {
-                                        found = true;
-                                        break;
+                                        if (addedDirectory == Option.getDirectory() + "\\" + directory)
+                                        {
+                                            found = true;
+                                            break;
+                                        }
                                     }
+                                    if (!found)
+                                    {
+                                        directories.Add(Option.getDirectory() + "\\" + directory);
+                                    }
+                                    break;
                                 }
-                                if (!found)
+                                int lastIndex = directory.LastIndexOf("\\");
+                                if (lastIndex != -1)
                                 {
-                                    directories.Add(Option.getDirectory() + "\\" + directory);
+                                    directory = directory.Substring(0, lastIndex);
                                 }
-                                break;
-                            }
-                            int lastIndex = directory.LastIndexOf("\\");
-                            if (lastIndex != -1)
-                            {
-                                directory = directory.Substring(0, lastIndex);
-                            }
-                            else
-                            {
-                                break;
+                                else
+                                {
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    if (directories.Count == 0)
-                    {
-                        Console.WriteLine("No modified files where found");
-                    }
-                    else
-                    {
-                        foreach (string directory in directories)
+                        if (directories.Count == 0)
                         {
-                            processDirectory(directory);
+                            Logs.getInstance().info("No modified files where found");
+                        }
+                        else
+                        {
+                            foreach (string directory in directories)
+                            {
+                                processDirectory(directory);
+                            }
                         }
                     }
                 }
+                else
+                {
+                    Logs.getInstance().error("The path must be a git repository or a sight directory that contain a Properties.cmake file.");
+                }
             }
-            else
+
+            Logs logs = Logs.getInstance();
+            foreach (string log in logs.getInfo())
             {
-                Console.WriteLine("The path must be a git repository or a sight directory that contain a Properties.cmake file");
+                Console.WriteLine(log);
+            }
+
+            if (logs.getErrors().Count > 0)
+            {
+                foreach(string log in logs.getErrors())
+                {
+                    Console.WriteLine(log);
+                }
+                Environment.Exit(1);
             }
         }
 
+        /// <summary>
+        /// Check many things in a directory that contains a Properties.cmake
+        /// </summary>
+        /// <param name="_directory">The directory (Bundle/SrcLib/App) to check</param>
         static private void processDirectory(string _directory)
         {
             /// Get sight directories informations
@@ -167,11 +185,11 @@ namespace SightProperties
                 }
                 if (!findAppXml)
                 {
-                    Console.WriteLine("The bundle: `appXml` was not found in the `Properties.cmake` in " + _directory);
+                    Logs.getInstance().error("The bundle: `appXml` was not found in the `Properties.cmake` in " + _directory + ".");
                 }
                 if (!findFwlauncher)
                 {
-                    Console.WriteLine("The bundle: `fwlauncher` was not found in the `Properties.cmake` in " + _directory);
+                    Logs.getInstance().error("The bundle: `fwlauncher` was not found in the `Properties.cmake` in " + _directory + ".");
                 }
 
                 ///========================================================================================================
@@ -214,7 +232,7 @@ namespace SightProperties
 
                         if (!find)
                         {
-                            Console.WriteLine("The bundle: `" + propertiesRequirement + "` needs to be in the xml's requirements list in " + _directory);
+                            Logs.getInstance().error("The bundle: `" + propertiesRequirement + "` needs to be in the xml's requirements list in " + _directory + ".");
                         }
                     }
                 }
@@ -244,7 +262,7 @@ namespace SightProperties
                     }
                     if (!find)
                     {
-                        Console.WriteLine("The bundle: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the `Properties.cmake`");
+                        Logs.getInstance().error("The bundle: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the `Properties.cmake`.");
                     }
                 }
             }
@@ -297,7 +315,7 @@ namespace SightProperties
                     }
                     if (!find)
                     {
-                        Console.WriteLine("The library: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the `Properties.cmake`");
+                        Logs.getInstance().error("The library: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the `Properties.cmake`.");
                     }
                 }
             }
@@ -334,7 +352,7 @@ namespace SightProperties
                     {
                         if (!find)
                         {
-                            Console.WriteLine("The library/bundle: `" + requirementOrDependency + "` is not used in " + _directory);
+                            Logs.getInstance().error("The library/bundle: `" + requirementOrDependency + "` is not used in " + _directory + ".");
                         }
                     }
                 }
@@ -349,7 +367,7 @@ namespace SightProperties
                 string text = File.ReadAllText(propertiesFile);
                 if (!text.Contains("style-0.1/"))
                 {
-                    Console.WriteLine("The bundle: `style` is not used in " + _directory);
+                    Logs.getInstance().error("The bundle: `style` is not used in " + _directory + ".");
                 }
             }
 
@@ -410,7 +428,7 @@ namespace SightProperties
 
                     if (!find)
                     {
-                        Console.WriteLine("The service: `" + serviceUid + "` is not used in the file '" + file + "'");
+                        Logs.getInstance().error("The service: `" + serviceUid + "` is not used in the file '" + file + "'.");
                     }
                 }
             }
@@ -495,7 +513,7 @@ namespace SightProperties
 
                     if (!find)
                     {
-                        Console.WriteLine("The object: `" + objectUid + "` is not used in the file '" + file + "'");
+                        Logs.getInstance().error("The object: `" + objectUid + "` is not used in the file '" + file + "'.");
                     }
                 }
             }
@@ -525,7 +543,7 @@ namespace SightProperties
                         /// If the channel is used only once, it's not used
                         if (Regex.Matches(text, channel).Count <= 1)
                         {
-                            Console.WriteLine("The channel: `" + channel + "` is not used in the file '" + file + "'");
+                            Logs.getInstance().error("The channel: `" + channel + "` is not used in the file '" + file + "'.");
                         }
                     }
                 }
