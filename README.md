@@ -20,10 +20,16 @@ Open `SightProperties.sln` and compile by using visual studio.
 
 ### Use
 
-Start the utility : `SightProperties.exe <path>`.
+Use the utility with a bundle/library/app : `SightProperties.exe <path>`.
 
 ```
 - path : path to the bundle/library/app to check.
+```
+
+Use the utility with a repository : `SightProperties.exe <path>`.
+
+```
+- path : path to the repository.
 ```
 
 ## Authors
