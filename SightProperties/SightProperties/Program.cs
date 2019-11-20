@@ -191,49 +191,49 @@ namespace SightProperties
                 {
                     Logs.getInstance().error("The bundle: `fwlauncher` was not found in the `Properties.cmake` in " + _directory + ".");
                 }
+            }
 
-                ///========================================================================================================
-                /// Check that bundle in xml file are properly started (requirement in xml files)
-                ///========================================================================================================
-                foreach (string propertiesRequirement in propertiesRequirements)
+            ///========================================================================================================
+            /// Check that bundle in xml file are properly started (requirement in xml files)
+            ///========================================================================================================
+            foreach (string propertiesRequirement in propertiesRequirements)
+            {
+                /// List of bundle that require a starting
+                if (propertiesRequirement == "validators" ||
+                    propertiesRequirement == "filterUnknownSeries" ||
+                    propertiesRequirement == "filterVRRender" ||
+                    propertiesRequirement == "activities" ||
+                    propertiesRequirement == "arDataReg" ||
+                    propertiesRequirement == "dataReg" ||
+                    propertiesRequirement == "memory" ||
+                    propertiesRequirement == "preferences" ||
+                    propertiesRequirement == "servicesReg" ||
+                    propertiesRequirement == "ioDicomWeb" ||
+                    propertiesRequirement == "ioPacs" ||
+                    propertiesRequirement == "arPatchMedicalData" ||
+                    propertiesRequirement == "patchMedicalData" ||
+                    propertiesRequirement == "console" ||
+                    propertiesRequirement == "guiQt" ||
+                    propertiesRequirement == "scene2D" ||
+                    propertiesRequirement == "visuOgre" ||
+                    propertiesRequirement == "material" ||
+                    propertiesRequirement == "materialEx" ||
+                    propertiesRequirement == "visuVTKQml" ||
+                    propertiesRequirement == "visuVTKQt")
                 {
-                    /// List of bundle that require a starting
-                    if (propertiesRequirement == "validators" ||
-                        propertiesRequirement == "filterUnknownSeries" ||
-                        propertiesRequirement == "filterVRRender" ||
-                        propertiesRequirement == "activities" ||
-                        propertiesRequirement == "arDataReg" ||
-                        propertiesRequirement == "dataReg" ||
-                        propertiesRequirement == "memory" ||
-                        propertiesRequirement == "preferences" ||
-                        propertiesRequirement == "servicesReg" ||
-                        propertiesRequirement == "ioDicomWeb" ||
-                        propertiesRequirement == "ioPacs" ||
-                        propertiesRequirement == "arPatchMedicalData" ||
-                        propertiesRequirement == "patchMedicalData" ||
-                        propertiesRequirement == "console" ||
-                        propertiesRequirement == "guiQt" ||
-                        propertiesRequirement == "scene2D" ||
-                        propertiesRequirement == "visuOgre" ||
-                        propertiesRequirement == "material" ||
-                        propertiesRequirement == "materialEx" ||
-                        propertiesRequirement == "visuVTKQml" ||
-                        propertiesRequirement == "visuVTKQt")
+                    bool find = false;
+                    foreach (Tuple<string, string> requirement in xmlRequirements)
                     {
-                        bool find = false;
-                        foreach (Tuple<string, string> requirement in xmlRequirements)
+                        if (propertiesRequirement == requirement.Item1)
                         {
-                            if (propertiesRequirement == requirement.Item1)
-                            {
-                                find = true;
-                                break;
-                            }
+                            find = true;
+                            break;
                         }
+                    }
 
-                        if (!find)
-                        {
-                            Logs.getInstance().error("The bundle: `" + propertiesRequirement + "` needs to be in the xml's requirements list in " + _directory + ".");
-                        }
+                    if (!find)
+                    {
+                        Logs.getInstance().error("The bundle: `" + propertiesRequirement + "` needs to be in the xml's requirements list in " + _directory + ".");
                     }
                 }
             }
