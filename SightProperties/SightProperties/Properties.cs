@@ -95,7 +95,8 @@ namespace SightProperties
         {
             UNKNOW,
             APP,
-            BUNDLE
+            BUNDLE,
+            LIBRARY
         }
 
         /// <summary>
@@ -125,6 +126,8 @@ namespace SightProperties
                 return TYPE.APP;
             if (type == "BUNDLE")
                 return TYPE.BUNDLE;
+            if (type == "LIBRARY")
+                return TYPE.LIBRARY;
             return TYPE.UNKNOW;
         }
 
