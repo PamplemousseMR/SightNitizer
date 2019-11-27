@@ -224,6 +224,10 @@ namespace SightProperties
                 {
                     bundles.Add(new Tuple<string, string>("EUSResources", file));
                 }
+                if (text.Contains("icon=\"surgeomicsMedia") || text.Contains("<icon>surgeomicsMedia"))
+                {
+                    bundles.Add(new Tuple<string, string>("surgeomicsMedia", file));
+                }
             }
 
             return bundles;
