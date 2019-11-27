@@ -249,7 +249,7 @@ namespace SightProperties
             ///========================================================================================================
             foreach (Tuple<string, string> bundle in xmlBundles)
             {
-                /// Check this special bundle, it's not in the requirement list, there are included by others bundles
+                /// Check this special libraries, it's not in the requirement list, there are included by others bundles
                 if (bundle.Item1 != currentName &&
                     bundle.Item1 != "fwServices" &&
                     bundle.Item1 != "fwActivities" &&
@@ -270,6 +270,21 @@ namespace SightProperties
                     {
                         Logs.getInstance().error("The bundle: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the `Properties.cmake`.");
                     }
+                }
+            }
+
+            ///========================================================================================================
+            /// Check that this specials libraries are not in the requirement list, there are included by others bundles
+            ///========================================================================================================
+            foreach (string bundle in propertiesRequirements)
+            {
+                if (bundle == "fwServices" ||
+                    bundle == "fwActivities" ||
+                    bundle == "fwRenderOgre" ||
+                    bundle == "fwRenderVTK" ||
+                    bundle == "fwRenderQt")
+                {
+                    Logs.getInstance().error("The library: `" + bundle + "` should not be in the REQUIREMENT list of the `Properties.cmake`.");
                 }
             }
 
