@@ -325,7 +325,8 @@ namespace SightProperties
                     bundle.Item1 != "pybind11" &&
                     bundle.Item1 != "itkhdf5" &&
                     bundle.Item1 != "openvslam" &&
-                    bundle.Item1 != "spdlog")
+                    bundle.Item1 != "spdlog" &&
+                    bundle.Item1 != "grpcpp")
                 {
                     bool find = false;
                     foreach (string dependenci in propertiesDependencies)
