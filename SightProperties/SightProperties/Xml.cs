@@ -208,10 +208,6 @@ namespace SightProperties
                 {
                     bundles.Add(new Tuple<string, string>("media", file));
                 }
-                if (text.Contains("icon=\"arMedia") || text.Contains("<icon>arMedia"))
-                {
-                    bundles.Add(new Tuple<string, string>("arMedia", file));
-                }
                 if (text.Contains("icon=\"rdMedia") || text.Contains("<icon>rdMedia"))
                 {
                     bundles.Add(new Tuple<string, string>("rdMedia", file));
@@ -227,6 +223,10 @@ namespace SightProperties
                 if (text.Contains("icon=\"surgeomicsMedia") || text.Contains("<icon>surgeomicsMedia"))
                 {
                     bundles.Add(new Tuple<string, string>("surgeomicsMedia", file));
+                }
+                if (text.Contains("icon=\"flatIcon") || text.Contains("<icon>flatIcon"))
+                {
+                    bundles.Add(new Tuple<string, string>("flatIcon", file));
                 }
             }
 
