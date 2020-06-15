@@ -415,6 +415,7 @@ namespace SightProperties
         private static bool checkId(string _text, string _keyword)
         {
             return (_text.Contains("id=\"" + _keyword + "\"") ||
+                _text.Contains("value=\"" + _keyword + "\"") ||
                 _text.Contains("<id>" + _keyword + "</id>") ||
                 _text.Contains("config=\"" + _keyword + "\"") ||
                 _text.Contains("<ioSelectorConfig>" + _keyword + "</ioSelectorConfig>") ||
