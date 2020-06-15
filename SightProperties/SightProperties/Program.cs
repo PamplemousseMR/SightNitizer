@@ -102,49 +102,49 @@ namespace SightProperties
         /// <summary>
         /// Check many things in a directory that contains a Properties.cmake
         /// </summary>
-        /// <param name="_directory">The directory (Bundle/SrcLib/App) to check</param>
+        /// <param name="_directory">The directory (Module/SrcLib/App) to check</param>
         static private void processDirectory(string _directory)
         {
             /// Get sight directories informations
             string rootDirectory = Sight.getRootDirectory(_directory);
             List<string> sightDirectories = Sight.getSightDirectory(rootDirectory);
 
-            /// Retreive bundles with activities, app config and service config names
-            List<Tuple<string, List<string>>> activityBundles = new List<Tuple<string, List<string>>>();
-            List<Tuple<string, List<string>>> appConfigBundles = new List<Tuple<string, List<string>>>();
-            List<Tuple<string, List<string>>> serviceConfigBundles = new List<Tuple<string, List<string>>>();
+            /// Retreive modules with activities, app config and service config names
+            List<Tuple<string, List<string>>> activityModules = new List<Tuple<string, List<string>>>();
+            List<Tuple<string, List<string>>> appConfigModules = new List<Tuple<string, List<string>>>();
+            List<Tuple<string, List<string>>> serviceConfigModules = new List<Tuple<string, List<string>>>();
             foreach (string directory in sightDirectories)
             {
-                foreach (string dir in Sight.getBundleDirectories(directory))
+                foreach (string dir in Sight.getModuleDirectories(directory))
                 {
-                    activityBundles.Add(Sight.getActivitiesBundles(dir));
-                    appConfigBundles.Add(Sight.getAppConfigBundles(dir));
-                    serviceConfigBundles.Add(Sight.getServiceConfigBundles(dir));
+                    activityModules.Add(Sight.getActivitiesModules(dir));
+                    appConfigModules.Add(Sight.getAppConfigModules(dir));
+                    serviceConfigModules.Add(Sight.getServiceConfigModules(dir));
                 }
             }
 
-            /// Get current libray/bundle name
+            /// Get current libray/module name
             string[] path = _directory.Split('\\');
             string currentName = path[path.Length - 1];
 
-            /// Get bundles list of xml files
-            List<Tuple<string, string>> xmlBundles = Xml.getDefaultBundles(_directory);
-            xmlBundles.AddRange(Xml.getRequireBundles(_directory));
-            xmlBundles.AddRange(Xml.getObjectsBundles(_directory));
-            xmlBundles.AddRange(Xml.getOgreBundles(_directory));
-            xmlBundles.AddRange(Xml.getQtBundles(_directory));
-            xmlBundles.AddRange(Xml.getVTKBundles(_directory));
-            xmlBundles.AddRange(Xml.getStandardBundles(_directory));
-            xmlBundles.AddRange(Xml.getMediaBundles(_directory));
-            xmlBundles.AddRange(Xml.getExtensionBundles(_directory, activityBundles));
-            xmlBundles.AddRange(Xml.getExtensionBundles(_directory, appConfigBundles));
-            xmlBundles.AddRange(Xml.getExtensionBundles(_directory, serviceConfigBundles));
+            /// Get modules list of xml files
+            List<Tuple<string, string>> xmlModules = Xml.getDefaultModules(_directory);
+            xmlModules.AddRange(Xml.getRequireModules(_directory));
+            xmlModules.AddRange(Xml.getObjectsModules(_directory));
+            xmlModules.AddRange(Xml.getOgreModules(_directory));
+            xmlModules.AddRange(Xml.getQtModules(_directory));
+            xmlModules.AddRange(Xml.getVTKModules(_directory));
+            xmlModules.AddRange(Xml.getStandardModules(_directory));
+            xmlModules.AddRange(Xml.getMediaModules(_directory));
+            xmlModules.AddRange(Xml.getExtensionModules(_directory, activityModules));
+            xmlModules.AddRange(Xml.getExtensionModules(_directory, appConfigModules));
+            xmlModules.AddRange(Xml.getExtensionModules(_directory, serviceConfigModules));
 
-            /// Get require bundles in xml files
-            List<Tuple<string, string>> xmlRequirements = Xml.getRequireBundles(_directory);
+            /// Get require modules in xml files
+            List<Tuple<string, string>> xmlRequirements = Xml.getRequireModules(_directory);
 
-            /// Get bundles list of languages files
-            List<Tuple<string, string>> languagesBundles = Language.getIncludeBundles(_directory);
+            /// Get modules list of languages files
+            List<Tuple<string, string>> languagesModules = Language.getIncludeModules(_directory);
 
             /// Get Properties.cmake
             string propertiesFile = _directory + "\\Properties.cmake";
@@ -159,7 +159,7 @@ namespace SightProperties
             List<string> propertiesDependencies = Properties.getDependencies(propertiesFile);
 
             ///========================================================================================================
-            /// In case of APP type bundles
+            /// In case of APP type modules
             ///========================================================================================================
             if (propertiesType == Properties.TYPE.APP)
             {
@@ -185,11 +185,11 @@ namespace SightProperties
                 }
                 if (!findAppXml)
                 {
-                    Logs.getInstance().error("The bundle: `appXml` was not found in the `Properties.cmake` in " + _directory + ".");
+                    Logs.getInstance().error("The module: `appXml` was not found in the `Properties.cmake` in " + _directory + ".");
                 }
                 if (!findFwlauncher)
                 {
-                    Logs.getInstance().error("The bundle: `fwlauncher` was not found in the `Properties.cmake` in " + _directory + ".");
+                    Logs.getInstance().error("The module: `fwlauncher` was not found in the `Properties.cmake` in " + _directory + ".");
                 }
             }
 
@@ -199,11 +199,11 @@ namespace SightProperties
             if (propertiesType != Properties.TYPE.LIBRARY)
             {
                 ///========================================================================================================
-                /// Check that bundle in xml file are properly started (requirement in xml files)
+                /// Check that module in xml file are properly started (requirement in xml files)
                 ///========================================================================================================
                 foreach (string propertiesRequirement in propertiesRequirements)
                 {
-                    /// List of bundle that require a starting
+                    /// List of module that require a starting
                     if (propertiesRequirement == "validators" ||
                         propertiesRequirement == "filterUnknownSeries" ||
                         propertiesRequirement == "filterVRRender" ||
@@ -238,29 +238,29 @@ namespace SightProperties
 
                         if (!find)
                         {
-                            Logs.getInstance().error("The bundle: `" + propertiesRequirement + "` needs to be in the xml's requirements list in " + _directory + ".");
+                            Logs.getInstance().error("The module: `" + propertiesRequirement + "` needs to be in the xml's requirements list in " + _directory + ".");
                         }
                     }
                 }
             }
 
             ///========================================================================================================
-            /// Check that bundles used in xml files are in the Properties.cmake (REQUIREMENT)
+            /// Check that modules used in xml files are in the Properties.cmake (REQUIREMENT)
             ///========================================================================================================
-            foreach (Tuple<string, string> bundle in xmlBundles)
+            foreach (Tuple<string, string> module in xmlModules)
             {
-                /// Check this special libraries, it's not in the requirement list, there are included by others bundles
-                if (bundle.Item1 != currentName &&
-                    bundle.Item1 != "fwServices" &&
-                    bundle.Item1 != "fwActivities" &&
-                    bundle.Item1 != "fwRenderOgre" &&
-                    bundle.Item1 != "fwRenderVTK" &&
-                    bundle.Item1 != "fwRenderQt")
+                /// Check this special libraries, it's not in the requirement list, there are included by others modules
+                if (module.Item1 != currentName &&
+                    module.Item1 != "fwServices" &&
+                    module.Item1 != "fwActivities" &&
+                    module.Item1 != "fwRenderOgre" &&
+                    module.Item1 != "fwRenderVTK" &&
+                    module.Item1 != "fwRenderQt")
                 {
                     bool find = false;
                     foreach (string requirement in propertiesRequirements)
                     {
-                        if (requirement == bundle.Item1)
+                        if (requirement == module.Item1)
                         {
                             find = true;
                             break;
@@ -268,70 +268,70 @@ namespace SightProperties
                     }
                     if (!find)
                     {
-                        Logs.getInstance().error("The bundle: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the `Properties.cmake`.");
+                        Logs.getInstance().error("The module: `" + module.Item1 + "` from: `" + module.Item2 + "` was not found in the `Properties.cmake`.");
                     }
                 }
             }
 
             ///========================================================================================================
-            /// Check that this specials libraries are not in the requirement list, there are included by others bundles
+            /// Check that this specials libraries are not in the requirement list, there are included by others modules
             ///========================================================================================================
-            foreach (string bundle in propertiesRequirements)
+            foreach (string module in propertiesRequirements)
             {
-                if (bundle == "fwServices" ||
-                    bundle == "fwActivities" ||
-                    bundle == "fwRenderOgre" ||
-                    bundle == "fwRenderVTK" ||
-                    bundle == "fwRenderQt")
+                if (module == "fwServices" ||
+                    module == "fwActivities" ||
+                    module == "fwRenderOgre" ||
+                    module == "fwRenderVTK" ||
+                    module == "fwRenderQt")
                 {
-                    Logs.getInstance().error("The library: `" + bundle + "` should not be in the REQUIREMENT list of the `Properties.cmake`.");
+                    Logs.getInstance().error("The library: `" + module + "` should not be in the REQUIREMENT list of the `Properties.cmake`.");
                 }
             }
 
             ///========================================================================================================
             /// Check that library used in languages files are in the Properties.cmake (DEPENDENCIES)
             ///========================================================================================================
-            foreach (Tuple<string, string> bundle in languagesBundles)
+            foreach (Tuple<string, string> module in languagesModules)
             {
                 /// Skip external libraries and the current one
-                if (bundle.Item1 != currentName &&
-                    bundle.Item1 != "boost" &&
-                    bundle.Item1 != "camp" &&
-                    bundle.Item1 != "ceres" &&
-                    bundle.Item1 != "cppunit" &&
-                    bundle.Item1 != "dcmtk" &&
-                    bundle.Item1 != "Eigen" &&
-                    bundle.Item1 != "glm" &&
-                    bundle.Item1 != "librealsense2" &&
-                    bundle.Item1 != "libxml" &&
-                    bundle.Item1 != "OGRE" &&
-                    bundle.Item1 != "GL" &&
-                    bundle.Item1 != "OpenGL" &&
-                    bundle.Item1 != "opencv2" &&
-                    bundle.Item1 != "OpenNI" &&
-                    bundle.Item1 != "pcl" &&
-                    bundle.Item1 != "vtk" &&
-                    bundle.Item1 != "vlc" &&
-                    bundle.Item1 != "IPPE" &&
-                    bundle.Item1 != "cryptopp" &&
-                    bundle.Item1 != "glog" &&
-                    bundle.Item1 != "odil" &&
-                    bundle.Item1 != "sofa" &&
-                    bundle.Item1 != "tetgen" &&
-                    bundle.Item1 != "trakSTAR" &&
-                    bundle.Item1 != "BulletSoftBody" &&
-                    bundle.Item1 != "sys" &&
-                    bundle.Item1 != "grpc++" &&
-                    bundle.Item1 != "pybind11" &&
-                    bundle.Item1 != "itkhdf5" &&
-                    bundle.Item1 != "openvslam" &&
-                    bundle.Item1 != "spdlog" &&
-                    bundle.Item1 != "grpcpp")
+                if (module.Item1 != currentName &&
+                    module.Item1 != "boost" &&
+                    module.Item1 != "camp" &&
+                    module.Item1 != "ceres" &&
+                    module.Item1 != "cppunit" &&
+                    module.Item1 != "dcmtk" &&
+                    module.Item1 != "Eigen" &&
+                    module.Item1 != "glm" &&
+                    module.Item1 != "librealsense2" &&
+                    module.Item1 != "libxml" &&
+                    module.Item1 != "OGRE" &&
+                    module.Item1 != "GL" &&
+                    module.Item1 != "OpenGL" &&
+                    module.Item1 != "opencv2" &&
+                    module.Item1 != "OpenNI" &&
+                    module.Item1 != "pcl" &&
+                    module.Item1 != "vtk" &&
+                    module.Item1 != "vlc" &&
+                    module.Item1 != "IPPE" &&
+                    module.Item1 != "cryptopp" &&
+                    module.Item1 != "glog" &&
+                    module.Item1 != "odil" &&
+                    module.Item1 != "sofa" &&
+                    module.Item1 != "tetgen" &&
+                    module.Item1 != "trakSTAR" &&
+                    module.Item1 != "BulletSoftBody" &&
+                    module.Item1 != "sys" &&
+                    module.Item1 != "grpc++" &&
+                    module.Item1 != "pybind11" &&
+                    module.Item1 != "itkhdf5" &&
+                    module.Item1 != "openvslam" &&
+                    module.Item1 != "spdlog" &&
+                    module.Item1 != "grpcpp")
                 {
                     bool find = false;
                     foreach (string dependenci in propertiesDependencies)
                     {
-                        if (dependenci == bundle.Item1)
+                        if (dependenci == module.Item1)
                         {
                             find = true;
                             break;
@@ -339,64 +339,64 @@ namespace SightProperties
                     }
                     if (!find)
                     {
-                        Logs.getInstance().error("The library: `" + bundle.Item1 + "` from: `" + bundle.Item2 + "` was not found in the `Properties.cmake`.");
+                        Logs.getInstance().error("The library: `" + module.Item1 + "` from: `" + module.Item2 + "` was not found in the `Properties.cmake`.");
                     }
                 }
             }
 
             ///========================================================================================================
-            /// Check that bundles and libraries in the Properties.cmake are used
+            /// Check that modules and libraries in the Properties.cmake are used
             ///========================================================================================================
-            List<Tuple<string, string>> bundlesAndLibraries = xmlBundles;
-            bundlesAndLibraries.AddRange(languagesBundles);
+            List<Tuple<string, string>> modulesAndLibraries = xmlModules;
+            modulesAndLibraries.AddRange(languagesModules);
 
             List<string> requirementsAnDependencies = propertiesRequirements;
             requirementsAnDependencies.AddRange(propertiesDependencies);
             foreach (string requirementOrDependency in requirementsAnDependencies)
             {
-                /// Skip 'style' bundles, this bundle is used in a weird way and will be checked below
-                /// Skip 'uiTF' bundles, this bundle contains files for pre-defined TF
+                /// Skip 'style' modules, this module is used in a weird way and will be checked below
+                /// Skip 'uiTF' modules, this module contains files for pre-defined TF
                 if (!(
                     (requirementOrDependency == "style") ||
                     (requirementOrDependency.StartsWith("io"))
                     ))
                 {
                     bool find = false;
-                    foreach (Tuple<string, string> bundleOrLibrary in bundlesAndLibraries)
+                    foreach (Tuple<string, string> moduleOrLibrary in modulesAndLibraries)
                     {
-                        if (requirementOrDependency == bundleOrLibrary.Item1)
+                        if (requirementOrDependency == moduleOrLibrary.Item1)
                         {
                             find = true;
                             break;
                         }
                     }
-                    /// If the bundle is 'appXml' or 'fwlauncher', it can't be used.
-                    /// These bundle must be here only in APP type bundles (checked above).
+                    /// If the module is 'appXml' or 'fwlauncher', it can't be used.
+                    /// These module must be here only in APP type modules (checked above).
                     if (!((requirementOrDependency == "appXml" || requirementOrDependency == "fwlauncher") && propertiesType == Properties.TYPE.APP))
                     {
                         if (!find)
                         {
-                            Logs.getInstance().error("The library/bundle: `" + requirementOrDependency + "` is not used in " + _directory + ".");
+                            Logs.getInstance().error("The library/module: `" + requirementOrDependency + "` is not used in " + _directory + ".");
                         }
                     }
                 }
             }
 
             ///========================================================================================================
-            /// Check 'style' bundle here
+            /// Check 'style' module here
             ///========================================================================================================
             if (requirementsAnDependencies.Contains("style"))
             {
-                /// The 'style' bundle is used in the properties.cmake files
+                /// The 'style' module is used in the properties.cmake files
                 string text = File.ReadAllText(propertiesFile);
                 if (!text.Contains("style-0.1/"))
                 {
-                    Logs.getInstance().error("The bundle: `style` is not used in " + _directory + ".");
+                    Logs.getInstance().error("The module: `style` is not used in " + _directory + ".");
                 }
             }
 
             ///========================================================================================================
-            /// TODO, check IO bundles, video bundles
+            /// TODO, check IO modules, video modules
             ///========================================================================================================
 
             ///========================================================================================================

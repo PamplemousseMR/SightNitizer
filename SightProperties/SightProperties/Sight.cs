@@ -43,41 +43,41 @@ namespace SightProperties
         }
 
         /// <summary>
-        /// Get bundle directories in sight sub project
+        /// Get module directories in sight sub project
         /// </summary>
         /// <param name="_dir">The sight project</param>
-        /// <returns>A list of all bundle directories</returns>
-        public static List<string> getBundleDirectories(string _dir)
+        /// <returns>A list of all module directories</returns>
+        public static List<string> getModuleDirectories(string _dir)
         {
-            List<string> bundleDirectories = new List<string>();
+            List<string> moduleDirectories = new List<string>();
             if (Directory.GetFiles(_dir, "Properties.cmake").Length < 1)
             {
                 foreach (string dir in Directory.GetDirectories(_dir))
                 {
-                    bundleDirectories.AddRange(getBundleDirectories(dir));
+                    moduleDirectories.AddRange(getModuleDirectories(dir));
                 }
             }
             else
             {
                 string propertiesFile = _dir + "\\Properties.cmake";
                 Properties.TYPE propertiesType = Properties.getType(propertiesFile);
-                if (propertiesType == Properties.TYPE.BUNDLE)
+                if (propertiesType == Properties.TYPE.MODULE || propertiesType == Properties.TYPE.BUNDLE)
                 {
-                    bundleDirectories.Add(_dir);
+                    moduleDirectories.Add(_dir);
                 }
             }
-            return bundleDirectories;
+            return moduleDirectories;
         }
 
         /// <summary>
-        /// Get activities IDs related to a bundle
+        /// Get activities IDs related to a module
         /// </summary>
-        /// <param name="_dir">The bundle directory</param>
-        /// <returns>A tuple with the name of the bundle, and a list of all activities</returns>
-        public static Tuple<string, List<string>> getActivitiesBundles(string _dir)
+        /// <param name="_dir">The module directory</param>
+        /// <returns>A tuple with the name of the module, and a list of all activities</returns>
+        public static Tuple<string, List<string>> getActivitiesModules(string _dir)
         {
             string propertiesFile = _dir + "\\Properties.cmake";
-            string bundleName = Properties.getName(propertiesFile);
+            string moduleName = Properties.getName(propertiesFile);
             List<string> activities = new List<string>();
 
             List<string> xmlFiles = Xml.getXMLFiles(_dir);
@@ -101,18 +101,18 @@ namespace SightProperties
                 }
             }
 
-            return new Tuple<string, List<string>>(bundleName, activities);
+            return new Tuple<string, List<string>>(moduleName, activities);
         }
 
         /// <summary>
-        /// Get app config IDs related to a bundle
+        /// Get app config IDs related to a module
         /// </summary>
-        /// <param name="_dir">The bundle directory</param>
-        /// <returns>A tuple with the name of the bundle, and a list of all app config</returns>
-        public static Tuple<string, List<string>> getAppConfigBundles(string _dir)
+        /// <param name="_dir">The module directory</param>
+        /// <returns>A tuple with the name of the module, and a list of all app config</returns>
+        public static Tuple<string, List<string>> getAppConfigModules(string _dir)
         {
             string propertiesFile = _dir + "\\Properties.cmake";
-            string bundleName = Properties.getName(propertiesFile);
+            string moduleName = Properties.getName(propertiesFile);
             List<string> appConfig = new List<string>();
 
             List<string> xmlFiles = Xml.getXMLFiles(_dir);
@@ -135,18 +135,18 @@ namespace SightProperties
                 }
             }
 
-            return new Tuple<string, List<string>>(bundleName, appConfig);
+            return new Tuple<string, List<string>>(moduleName, appConfig);
         }
 
         /// <summary>
-        /// Get service config IDs related to a bundle
+        /// Get service config IDs related to a module
         /// </summary>
-        /// <param name="_dir">The bundle directory</param>
-        /// <returns>A tuple with the name of the bundle, and a list of all service config</returns>
-        public static Tuple<string, List<string>> getServiceConfigBundles(string _dir)
+        /// <param name="_dir">The module directory</param>
+        /// <returns>A tuple with the name of the module, and a list of all service config</returns>
+        public static Tuple<string, List<string>> getServiceConfigModules(string _dir)
         {
             string propertiesFile = _dir + "\\Properties.cmake";
-            string bundleName = Properties.getName(propertiesFile);
+            string moduleName = Properties.getName(propertiesFile);
             List<string> serviceConfig = new List<string>();
 
             List<string> xmlFiles = Xml.getXMLFiles(_dir);
@@ -170,7 +170,7 @@ namespace SightProperties
                 }
             }
 
-            return new Tuple<string, List<string>>(bundleName, serviceConfig);
+            return new Tuple<string, List<string>>(moduleName, serviceConfig);
         }
 
     }

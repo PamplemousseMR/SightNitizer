@@ -8,39 +8,39 @@ namespace SightProperties
     class Xml
     {
         /// <summary>
-        /// Get default bundle like serviceReg
+        /// Get default module like serviceReg
         /// </summary>
-        /// <returns>The list of require bundles</returns>
-        public static List<Tuple<string, string>> getDefaultBundles(string _rep)
+        /// <returns>The list of require modules</returns>
+        public static List<Tuple<string, string>> getDefaultModules(string _rep)
         {
             List<string> xmlFiles = getXMLFiles(_rep);
 
-            List<Tuple<string, string>> bundles = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> modules = new List<Tuple<string, string>>();
             foreach (string file in xmlFiles)
             {
                 string text = File.ReadAllText(file);
                 if (text.Contains("::fwServices::"))
                 {
-                    bundles.Add(new Tuple<string, string>("servicesReg", file));
+                    modules.Add(new Tuple<string, string>("servicesReg", file));
                 }
                 if (text.Contains("::fwActivities::"))
                 {
-                    bundles.Add(new Tuple<string, string>("activities", file));
+                    modules.Add(new Tuple<string, string>("activities", file));
                 }
             }
 
-            return bundles;
+            return modules;
         }
 
         /// <summary>
-        /// Get bundles related to requirement
+        /// Get modules related to requirement
         /// </summary>
-        /// <returns>The list of require bundles</returns>
-        public static List<Tuple<string, string>> getRequireBundles(string _rep)
+        /// <returns>The list of require modules</returns>
+        public static List<Tuple<string, string>> getRequireModules(string _rep)
         {
             List<string> xmlFiles = getXMLFiles(_rep);
 
-            List<Tuple<string, string>> bundles = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> modules = new List<Tuple<string, string>>();
             foreach (string file in xmlFiles)
             {
                 XmlDocument doc = new XmlDocument();
@@ -50,22 +50,22 @@ namespace SightProperties
 
                 foreach (string s in requirements)
                 {
-                    bundles.Add(new Tuple<string, string>(s, file));
+                    modules.Add(new Tuple<string, string>(s, file));
                 }
             }
 
-            return bundles;
+            return modules;
         }
 
         /// <summary>
-        /// Get bundles related to object like dataReg or arDataReg
+        /// Get modules related to object like dataReg or arDataReg
         /// </summary>
-        /// <returns>The list of require bundles</returns>
-        public static List<Tuple<string, string>> getObjectsBundles(string _rep)
+        /// <returns>The list of require modules</returns>
+        public static List<Tuple<string, string>> getObjectsModules(string _rep)
         {
             List<string> xmlFiles = getXMLFiles(_rep);
 
-            List<Tuple<string, string>> bundles = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> modules = new List<Tuple<string, string>>();
             foreach (string file in xmlFiles)
             {
                 XmlDocument doc = new XmlDocument();
@@ -76,106 +76,106 @@ namespace SightProperties
                 {
                     if (s.StartsWith("::fwData::") || s.StartsWith("::fwMedData::"))
                     {
-                        bundles.Add(new Tuple<string, string>("dataReg", file));
+                        modules.Add(new Tuple<string, string>("dataReg", file));
                     }
                     else if (s.StartsWith("::arData::"))
                     {
-                        bundles.Add(new Tuple<string, string>("arDataReg", file));
+                        modules.Add(new Tuple<string, string>("arDataReg", file));
                     }
                     else if (s.StartsWith("::rdDataBiopsy::"))
                     {
-                        bundles.Add(new Tuple<string, string>("rdDataBiopsyReg", file));
+                        modules.Add(new Tuple<string, string>("rdDataBiopsyReg", file));
                     }
                     else if (s.StartsWith("::brData::"))
                     {
-                        bundles.Add(new Tuple<string, string>("brDataReg", file));
+                        modules.Add(new Tuple<string, string>("brDataReg", file));
                     }
                 }
             }
 
-            return bundles;
+            return modules;
         }
 
         /// <summary>
-        /// Get bundles related to qt
+        /// Get modules related to qt
         /// </summary>
-        /// <returns>The list of require bundles</returns>
-        public static List<Tuple<string, string>> getQtBundles(string _rep)
+        /// <returns>The list of require modules</returns>
+        public static List<Tuple<string, string>> getQtModules(string _rep)
         {
             List<string> xmlFiles = getXMLFiles(_rep);
 
-            List<Tuple<string, string>> bundles = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> modules = new List<Tuple<string, string>>();
             foreach (string file in xmlFiles)
             {
                 string text = File.ReadAllText(file);
                 if (text.Contains("::fwRenderQt::SRender"))
                 {
-                    bundles.Add(new Tuple<string, string>("scene2D", file));
+                    modules.Add(new Tuple<string, string>("scene2D", file));
                 }
             }
 
-            return bundles;
+            return modules;
         }
 
         /// <summary>
-        /// Get bundles related to ogre
+        /// Get modules related to ogre
         /// </summary>
-        /// <returns>The list of require bundles</returns>
-        public static List<Tuple<string, string>> getOgreBundles(string _rep)
+        /// <returns>The list of require modules</returns>
+        public static List<Tuple<string, string>> getOgreModules(string _rep)
         {
             List<string> xmlFiles = getXMLFiles(_rep);
 
-            List<Tuple<string, string>> bundles = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> modules = new List<Tuple<string, string>>();
             foreach (string file in xmlFiles)
             {
                 string text = File.ReadAllText(file);
                 if (text.Contains("::fwRenderOgre::SRender"))
                 {
-                    bundles.Add(new Tuple<string, string>("visuOgreQt", file));
-                    bundles.Add(new Tuple<string, string>("visuOgre", file));
-                    bundles.Add(new Tuple<string, string>("material", file));
+                    modules.Add(new Tuple<string, string>("visuOgreQt", file));
+                    modules.Add(new Tuple<string, string>("visuOgre", file));
+                    modules.Add(new Tuple<string, string>("material", file));
                 }
                 if (text.Contains("::visuOgreExAdaptor::SIDVRRender"))
                 {
-                    bundles.Add(new Tuple<string, string>("materialEx", file));
+                    modules.Add(new Tuple<string, string>("materialEx", file));
                 }
             }
 
-            return bundles;
+            return modules;
         }
 
         /// <summary>
-        /// Get bundles related to VTK
+        /// Get modules related to VTK
         /// </summary>
-        /// <returns>The list of require bundles</returns>
-        public static List<Tuple<string, string>> getVTKBundles(string _rep)
+        /// <returns>The list of require modules</returns>
+        public static List<Tuple<string, string>> getVTKModules(string _rep)
         {
             List<string> xmlFiles = getXMLFiles(_rep);
 
-            List<Tuple<string, string>> bundles = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> modules = new List<Tuple<string, string>>();
             foreach (string file in xmlFiles)
             {
                 string text = File.ReadAllText(file);
                 if (text.Contains("::fwRenderVTK::SRender"))
                 {
-                    bundles.Add(new Tuple<string, string>("visuVTKQt", file));
-                    bundles.Add(new Tuple<string, string>("visuVTK", file));
+                    modules.Add(new Tuple<string, string>("visuVTKQt", file));
+                    modules.Add(new Tuple<string, string>("visuVTK", file));
                 }
             }
 
-            return bundles;
+            return modules;
         }
 
         /// <summary>
-        /// Get standard bundles from each xml files in a directory
+        /// Get standard modules from each xml files in a directory
         /// </summary>
-        /// <param name="_rep">The directory where find bundles in xml files</param>
+        /// <param name="_rep">The directory where find modules in xml files</param>
         /// <returns></returns>
-        public static List<Tuple<string, string>> getStandardBundles(string _rep)
+        public static List<Tuple<string, string>> getStandardModules(string _rep)
         {
             List<string> xmlFiles = getXMLFiles(_rep);
 
-            List<Tuple<string, string>> bundles = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> modules = new List<Tuple<string, string>>();
             foreach (string file in xmlFiles)
             {
                 XmlDocument doc = new XmlDocument();
@@ -185,79 +185,79 @@ namespace SightProperties
 
                 foreach (string s in services)
                 {
-                    bundles.Add(new Tuple<string, string>(extractBundle(s), file));
+                    modules.Add(new Tuple<string, string>(extractModule(s), file));
                 }
             }
 
-            return bundles;
+            return modules;
         }
 
         /// <summary>
-        /// Get bundles related to media
+        /// Get modules related to media
         /// </summary>
-        /// <returns>The list of require bundles</returns>
-        public static List<Tuple<string, string>> getMediaBundles(string _rep)
+        /// <returns>The list of require modules</returns>
+        public static List<Tuple<string, string>> getMediaModules(string _rep)
         {
             List<string> xmlFiles = getXMLFiles(_rep);
 
-            List<Tuple<string, string>> bundles = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> modules = new List<Tuple<string, string>>();
             foreach (string file in xmlFiles)
             {
                 string text = File.ReadAllText(file);
                 if (text.Contains("icon=\"media") || text.Contains("<icon>media"))
                 {
-                    bundles.Add(new Tuple<string, string>("media", file));
+                    modules.Add(new Tuple<string, string>("media", file));
                 }
                 if (text.Contains("icon=\"rdMedia") || text.Contains("<icon>rdMedia"))
                 {
-                    bundles.Add(new Tuple<string, string>("rdMedia", file));
+                    modules.Add(new Tuple<string, string>("rdMedia", file));
                 }
                 if (text.Contains("icon=\"perfusionMedia") || text.Contains("<icon>perfusionMedia"))
                 {
-                    bundles.Add(new Tuple<string, string>("perfusionMedia", file));
+                    modules.Add(new Tuple<string, string>("perfusionMedia", file));
                 }
                 if (text.Contains("icon=\"EUSResources") || text.Contains("<icon>EUSResources"))
                 {
-                    bundles.Add(new Tuple<string, string>("EUSResources", file));
+                    modules.Add(new Tuple<string, string>("EUSResources", file));
                 }
                 if (text.Contains("icon=\"surgeomicsMedia") || text.Contains("<icon>surgeomicsMedia"))
                 {
-                    bundles.Add(new Tuple<string, string>("surgeomicsMedia", file));
+                    modules.Add(new Tuple<string, string>("surgeomicsMedia", file));
                 }
                 if (text.Contains("icon=\"flatIcon") || text.Contains("<icon>flatIcon"))
                 {
-                    bundles.Add(new Tuple<string, string>("flatIcon", file));
+                    modules.Add(new Tuple<string, string>("flatIcon", file));
                 }
             }
 
-            return bundles;
+            return modules;
         }
 
         /// <summary>
-        /// Get bundles related to extensions
+        /// Get modules related to extensions
         /// </summary>
-        /// <param name="_extensionBundles">Bundle name with extensions list</param>
-        /// <returns>The list of require bundles</returns>
-        public static List<Tuple<string, string>> getExtensionBundles(string _rep, List<Tuple<string, List<string>>> _extensionBundles)
+        /// <param name="_extensionModules">Module name with extensions list</param>
+        /// <returns>The list of require modules</returns>
+        public static List<Tuple<string, string>> getExtensionModules(string _rep, List<Tuple<string, List<string>>> _extensionModules)
         {
             List<string> xmlFiles = getXMLFiles(_rep);
-            List<Tuple<string, string>> bundles = new List<Tuple<string, string>>();
+            List<Tuple<string, string>> modules = new List<Tuple<string, string>>();
             foreach (string file in xmlFiles)
             {
                 string text = File.ReadAllText(file);
-                foreach (Tuple<string, List<string>> extensionBundle in _extensionBundles)
+                foreach (Tuple<string, List<string>> extensionModule in _extensionModules)
                 {
-                    foreach (string extension in extensionBundle.Item2)
+                    foreach (string extension in extensionModule.Item2)
                     {
                         if (checkId(text, extension))
                         {
-                            bundles.Add(new Tuple<string, string>(extensionBundle.Item1, file));
+                            modules.Add(new Tuple<string, string>(extensionModule.Item1, file));
                         }
                     }
                 }
             }
 
-            return bundles;
+            return modules;
         }
 
         /// <summary>
@@ -354,11 +354,11 @@ namespace SightProperties
         }
 
         /// <summary>
-        /// Extract the bundle name from a service name
+        /// Extract the module name from a service name
         /// </summary>
         /// <param name="_service">The name of the service</param>
-        /// <returns>The name of the bundle</returns>
-        private static string extractBundle(string _service)
+        /// <returns>The name of the module</returns>
+        private static string extractModule(string _service)
         {
             int end = _service.Substring(2).IndexOf(":");
             return _service.Substring(2, end);

@@ -6,10 +6,10 @@ namespace SightProperties
     class Properties
     {
         /// <summary>
-        /// Get the bundles list from a properties file
+        /// Get the modules list from a properties file
         /// </summary>
         /// <param name="_file">The properties file</param>
-        /// <returns>The list of all bundles</returns>
+        /// <returns>The list of all modules</returns>
         public static List<string> getRequirements(string _file)
         {
             string[] lines = System.IO.File.ReadAllLines(_file);
@@ -52,7 +52,7 @@ namespace SightProperties
         /// Get the library list from a properties file
         /// </summary>
         /// <param name="_file">The properties file</param>
-        /// <returns>The list of all bundles</returns>
+        /// <returns>The list of all modules</returns>
         public static List<string> getDependencies(string _file)
         {
             string[] lines = System.IO.File.ReadAllLines(_file);
@@ -96,6 +96,7 @@ namespace SightProperties
             UNKNOW,
             APP,
             BUNDLE,
+            MODULE,
             LIBRARY
         }
 
@@ -124,9 +125,11 @@ namespace SightProperties
             }
             if (type == "APP")
                 return TYPE.APP;
-            if (type == "BUNDLE")
+            else if (type == "BUNDLE")
                 return TYPE.BUNDLE;
-            if (type == "LIBRARY")
+            else if (type == "MODULE")
+                return TYPE.MODULE;
+            else if (type == "LIBRARY")
                 return TYPE.LIBRARY;
             return TYPE.UNKNOW;
         }
