@@ -228,6 +228,10 @@ namespace SightProperties
                 {
                     modules.Add(new Tuple<string, string>("flatIcon", file));
                 }
+                if (text.Contains("icon=\"persiaMedia") || text.Contains("<icon>persiaMedia"))
+                {
+                    modules.Add(new Tuple<string, string>("persiaMedia", file));
+                }
             }
 
             return modules;
