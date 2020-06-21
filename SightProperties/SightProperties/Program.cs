@@ -355,7 +355,7 @@ namespace SightProperties
             foreach (string requirementOrDependency in requirementsAnDependencies)
             {
                 /// Skip 'style' modules, this module is used in a weird way and will be checked below
-                /// Skip 'uiTF' modules, this module contains files for pre-defined TF
+                /// Skip 'io' modules, they just need to be include to work.
                 if (!(
                     (requirementOrDependency == "style") ||
                     (requirementOrDependency.StartsWith("io"))
