@@ -353,6 +353,10 @@ namespace SightProperties
                 {
                     services.Add(selectionAtt.Attributes["service"].InnerText);
                 }
+                if (selectionAtt.Attributes["filter"] != null)
+                {
+                    services.Add(selectionAtt.Attributes["filter"].InnerText);
+                }
             }
             return services;
         }
