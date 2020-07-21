@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightProperties", "SightProperties\SightProperties.csproj", "{382BBF2C-C735-46DC-9845-0B57B4418284}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightNitizer", "SightNitizer\SightNitizer.csproj", "{382BBF2C-C735-46DC-9845-0B57B4418284}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9037A266-0C29-499B-A527-EEA1A6FDC04F}"
 	ProjectSection(SolutionItems) = preProject
-		SightProperties\App.config = SightProperties\App.config
+		SightNitizer\App.config = SightNitizer\App.config
 	EndProjectSection
 EndProject
 Global

@@ -1,4 +1,4 @@
-# SightProperties
+# SightNitizer
 
 This project allow to check bundles and libraries in Sight.
 * Check that appxml and fwlauncher are in the Properties.cmake.
@@ -16,17 +16,17 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Compilation
 
-Open `SightProperties.sln` and compile by using visual studio.
+Open `SightNitizer.sln` and compile by using visual studio.
 
 ### Use
 
-Use the utility with a bundle/library/app : `SightProperties.exe <path>`.
+Use the utility with a bundle/library/app : `SightNitizer.exe <path>`.
 
 ```
 - path : path to the bundle/library/app to check.
 ```
 
-Use the utility with a repository : `SightProperties.exe <path>`.
+Use the utility with a repository : `SightNitizer.exe <path>`.
 
 ```
 - path : path to the repository.

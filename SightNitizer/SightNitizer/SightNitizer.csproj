@@ -7,8 +7,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{382BBF2C-C735-46DC-9845-0B57B4418284}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>SightProperties</RootNamespace>
-    <AssemblyName>SightProperties</AssemblyName>
+    <RootNamespace>SightNitizer</RootNamespace>
+    <AssemblyName>SightNitizer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

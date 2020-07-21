@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SightProperties
+namespace SightNitizer
 {
     class Logs
     {

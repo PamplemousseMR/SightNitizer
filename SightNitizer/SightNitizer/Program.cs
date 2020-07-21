@@ -5,7 +5,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace SightProperties
+namespace SightNitizer
 {
 
     class Program
