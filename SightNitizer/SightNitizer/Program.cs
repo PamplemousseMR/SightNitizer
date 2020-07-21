@@ -355,11 +355,7 @@ namespace SightNitizer
             foreach (string requirementOrDependency in requirementsAnDependencies)
             {
                 /// Skip 'style' modules, this module is used in a weird way and will be checked below
-                /// Skip 'io' modules, they just need to be include to work.
-                if (!(
-                    (requirementOrDependency == "style") ||
-                    (requirementOrDependency.StartsWith("io"))
-                    ))
+                if (!(requirementOrDependency == "style"))
                 {
                     bool find = false;
                     foreach (Tuple<string, string> moduleOrLibrary in modulesAndLibraries)
