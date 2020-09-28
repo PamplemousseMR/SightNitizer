@@ -74,13 +74,17 @@ namespace SightNitizer
                 List<string> objects = getObjects(doc);
                 foreach (string s in objects)
                 {
-                    if (s.StartsWith("::fwData::") || s.StartsWith("::fwMedData::"))
+                    if (s.StartsWith("::fwData::"))
                     {
-                        modules.Add(new Tuple<string, string>("dataReg", file));
+                        modules.Add(new Tuple<string, string>("fwData", file));
+                    }
+                    else if (s.StartsWith("::fwMedData::"))
+                    {
+                        modules.Add(new Tuple<string, string>("fwMedData", file));
                     }
                     else if (s.StartsWith("::arData::"))
                     {
-                        modules.Add(new Tuple<string, string>("arDataReg", file));
+                        modules.Add(new Tuple<string, string>("arData", file));
                     }
                     else if (s.StartsWith("::rdDataBiopsy::"))
                     {
