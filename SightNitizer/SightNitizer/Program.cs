@@ -208,8 +208,6 @@ namespace SightNitizer
                         propertiesRequirement == "filterUnknownSeries" ||
                         propertiesRequirement == "filterVRRender" ||
                         propertiesRequirement == "activities" ||
-                        propertiesRequirement == "arDataReg" ||
-                        propertiesRequirement == "dataReg" ||
                         propertiesRequirement == "memory" ||
                         propertiesRequirement == "preferences" ||
                         propertiesRequirement == "servicesReg" ||

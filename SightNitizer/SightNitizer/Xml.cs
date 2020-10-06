@@ -58,7 +58,7 @@ namespace SightNitizer
         }
 
         /// <summary>
-        /// Get modules related to object like dataReg or arDataReg
+        /// Get modules related to object
         /// </summary>
         /// <returns>The list of require modules</returns>
         public static List<Tuple<string, string>> getObjectsModules(string _rep)
