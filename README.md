@@ -1,6 +1,6 @@
 # SightNitizer
 
-This project allow to check bundles and libraries in Sight.
+This project allow to check bundles and libraries in [Sight](https://github.com/IRCAD-IHU/sight) framework.
 * Check that appxml and fwlauncher are in the Properties.cmake.
 * Check that bundle in xml file are properly started (requirement in xml files).
 * Check that bundles used in xml files are in the Properties.cmake (REQUIREMENT).
