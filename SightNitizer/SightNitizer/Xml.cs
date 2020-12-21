@@ -137,11 +137,6 @@ namespace SightNitizer
                 {
                     modules.Add(new Tuple<string, string>("visuOgreQt", file));
                     modules.Add(new Tuple<string, string>("visuOgre", file));
-                    modules.Add(new Tuple<string, string>("material", file));
-                }
-                if (text.Contains("::visuOgreExAdaptor::SIDVRRender"))
-                {
-                    modules.Add(new Tuple<string, string>("materialEx", file));
                 }
             }
 
